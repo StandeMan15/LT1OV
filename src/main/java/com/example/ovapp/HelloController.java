@@ -19,9 +19,9 @@ public class HelloController {
     @FXML
     private ChoiceBox<String> choiceBoxArrival;
     @FXML
-    private Label routeOutText;
-    @FXML
     private ChoiceBox<String> choiceBoxDeparture;
+    @FXML
+    private Label routeOutText;
     @FXML
     private DatePicker datePicker;;
     @FXML
@@ -52,6 +52,7 @@ public class HelloController {
     }
 
     private void initializeChoiceBox() {
+
 
         choiceBoxDeparture.setItems(stations);
         choiceBoxArrival.setItems(stations);

@@ -14,7 +14,7 @@ public class HelloController {
 
     private String Departure;
     private String Arrival;
-
+    ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
 
     @FXML
     private ChoiceBox<String> choiceBoxArrival;
@@ -52,7 +52,6 @@ public class HelloController {
     }
 
     private void initializeChoiceBox() {
-        ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Enschede");
 
         choiceBoxDeparture.setItems(stations);
         choiceBoxArrival.setItems(stations);

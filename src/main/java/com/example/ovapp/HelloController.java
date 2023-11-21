@@ -6,8 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class HelloController {
 
@@ -22,21 +23,24 @@ public class HelloController {
     @FXML
     private ChoiceBox<String> choiceBoxDeparture;
     @FXML
-    private DatePicker datePicker;
+    private DatePicker datePicker;;
     @FXML
-    private Spinner<Double> timePicker;
+    private Spinner<LocalTime> timePicker;
 
     @FXML
     protected void SearchRoute() {
         Departure = choiceBoxDeparture.getValue();
         Arrival = choiceBoxArrival.getValue();
         LocalDate selectedDate = datePicker.getValue();
-        Double selectedTime = timePicker.getValue();
+        LocalTime selectedTime = timePicker.getValue();
 
-        try{
-            routeOutText.setText(String.format("Dit is de route van %s naar %s op %s om %.2f uur",
-                    Departure, Arrival, selectedDate.toString(), selectedTime));
-        } catch(NullPointerException e){
+        try {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            routeOutText.setText(String.format("Dit is de route van %s naar %s op %s om %s uur",
+                    Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
+        } catch (NullPointerException e) {
             routeOutText.setText(" Vul A.U.B. alle velden in.");
         }
     }
@@ -59,26 +63,46 @@ public class HelloController {
 
     }
     private void initializeTimePicker() {
-        SpinnerValueFactory<Double> valueFactory =
-                new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, 23.55, 12.0, 0.05);
+        SpinnerValueFactory<LocalTime> valueFactory = new SpinnerValueFactory<>() {
+            {
+                setConverter(new StringConverter<LocalTime>() {
+                    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        valueFactory.setConverter(new StringConverter<>() {
-            private final DecimalFormat decimalFormat = new DecimalFormat("00.00");
+                    @Override
+                    public String toString(LocalTime value) {
+                        return formatter.format(value);
+                    }
 
-            @Override
-            public String toString(Double value) {
-                return decimalFormat.format(value);
+                    @Override
+                    public LocalTime fromString(String text) {
+                        return LocalTime.parse(text, formatter);
+                    }
+                });
             }
 
             @Override
-            public Double fromString(String text) {
-                return Double.parseDouble(text);
+            public void decrement(int steps) {
+                if (getValue() != null) {
+                    LocalTime time = getValue();
+                    setValue(time.minusMinutes(steps));
+                }
             }
-        });
+
+            @Override
+            public void increment(int steps) {
+                if (getValue() != null) {
+                    LocalTime time = getValue();
+                    setValue(time.plusMinutes(steps));
+                }
+            }
+        };
+
+        valueFactory.setValue(LocalTime.of(12, 0)); // Default value
 
         timePicker.setValueFactory(valueFactory);
 
         timePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Add any additional logic you might need
         });
     }
 }

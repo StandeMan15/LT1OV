@@ -15,7 +15,7 @@ public class HelloController {
 
     private String Departure;
     private String Arrival;
-    ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Enschede", "Utrecht", "Schiphol", "Zwolle", "Breda");
+    ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
 
     @FXML
     private ComboBox<String> comboBoxArrival;

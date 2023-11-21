@@ -1,28 +1,28 @@
 package com.example.ovapp;
 
-import javafx.scene.control.*;
-import javafx.util.StringConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class HelloController {
-//test
+
     private String Departure;
     private String Arrival;
-
+    ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
 
     @FXML
-    private ChoiceBox<String> choiceBoxArrival;
+    private ComboBox<String> comboBoxArrival;
     @FXML
-    private ChoiceBox<String> choiceBoxDeparture;
+    private ComboBox<String> comboBoxDeparture;
     @FXML
     private Label routeOutText;
-
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -30,8 +30,8 @@ public class HelloController {
 
     @FXML
     protected void SearchRoute() {
-        Departure = choiceBoxDeparture.getValue();
-        Arrival = choiceBoxArrival.getValue();
+        Departure = comboBoxDeparture.getValue();
+        Arrival = comboBoxArrival.getValue();
         LocalDate selectedDate = datePicker.getValue();
         LocalTime selectedTime = timePicker.getValue();
 
@@ -39,7 +39,7 @@ public class HelloController {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            routeOutText.setText(String.format("Dit is de route van %s naar %s op %s om %s uur",
+            routeOutText.setText(String.format("Dit is de route:\nVan: %s\nNaar: %s\nOp: %s\nOm: %s uur",
                     Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
         } catch (NullPointerException e) {
             routeOutText.setText(" Vul A.U.B. alle velden in.");
@@ -48,22 +48,38 @@ public class HelloController {
 
     @FXML
     protected void initialize() {
-        initializeChoiceBox();
+        System.out.println("Controller initialized.");
+        initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
     }
 
-    private void initializeChoiceBox() {
-        ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Enschede", "Schiphol");
-
-        choiceBoxDeparture.setItems(stations);
-        choiceBoxArrival.setItems(stations);
+    private void initializeComboBoxes() {
+        comboBoxDeparture.setItems(stations);
+        comboBoxArrival.setItems(stations);
 
         // Set a default selection (optional)
-        choiceBoxDeparture.setValue(stations.get(0));
-        choiceBoxArrival.setValue(stations.get(0));
+        comboBoxDeparture.setValue("Kies station");
+        comboBoxArrival.setValue("Kies station");
 
+        comboBoxDeparture.setVisibleRowCount(4);
+        comboBoxArrival.setVisibleRowCount(4);
+
+        // Add an event listener to comboBoxDeparture to filter arrival options
+        comboBoxDeparture.setOnAction(event -> updateArrivalOptions());
     }
+
+    private void updateArrivalOptions() {
+        String selectedOption = comboBoxDeparture.getValue();
+
+        FilteredList<String> filteredArrivalOptions = new FilteredList<>(stations);
+
+        filteredArrivalOptions.setPredicate(option -> !option.equals(selectedOption));
+        comboBoxArrival.setItems(filteredArrivalOptions);
+
+        comboBoxArrival.setValue(filteredArrivalOptions.isEmpty() ? null : filteredArrivalOptions.get(0));
+    }
+
     private void initializeTimePicker() {
         SpinnerValueFactory<LocalTime> valueFactory = new SpinnerValueFactory<>() {
             {

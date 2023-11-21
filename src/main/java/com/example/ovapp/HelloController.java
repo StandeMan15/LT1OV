@@ -39,7 +39,7 @@ public class HelloController {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            routeOutText.setText(String.format("Dit is de route van %s naar %s op %s om %s uur",
+            routeOutText.setText(String.format("Dit is de route:\nVan: %s\nNaar: %s\nOp: %s\nOm: %s uur",
                     Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
         } catch (NullPointerException e) {
             routeOutText.setText(" Vul A.U.B. alle velden in.");
@@ -54,7 +54,7 @@ public class HelloController {
     }
 
     private void initializeChoiceBox() {
-        ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Enschede");
+        ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
 
         choiceBoxDeparture.setItems(stations);
         choiceBoxArrival.setItems(stations);

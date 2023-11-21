@@ -17,13 +17,14 @@ public class HelloController {
 
 
     @FXML
-    private ChoiceBox<String> choiceBoxArrival;
+    private ComboBox<String> choiceBoxArrival;
+    @FXML
+    private ComboBox<String> choiceBoxDeparture;
     @FXML
     private Label routeOutText;
+
     @FXML
-    private ChoiceBox<String> choiceBoxDeparture;
-    @FXML
-    private DatePicker datePicker;;
+    private DatePicker datePicker;
     @FXML
     private Spinner<LocalTime> timePicker;
 
@@ -49,6 +50,7 @@ public class HelloController {
     protected void initialize() {
         initializeChoiceBox();
         initializeTimePicker();
+        initializeDatePicker();
     }
 
     private void initializeChoiceBox() {
@@ -65,7 +67,7 @@ public class HelloController {
     private void initializeTimePicker() {
         SpinnerValueFactory<LocalTime> valueFactory = new SpinnerValueFactory<>() {
             {
-                setConverter(new StringConverter<LocalTime>() {
+                setConverter(new StringConverter<>() {
                     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
                     @Override
@@ -82,27 +84,20 @@ public class HelloController {
 
             @Override
             public void decrement(int steps) {
-                if (getValue() != null) {
-                    LocalTime time = getValue();
-                    setValue(time.minusMinutes(steps));
-                }
+                setValue(getValue().minusMinutes(steps));
             }
 
             @Override
             public void increment(int steps) {
-                if (getValue() != null) {
-                    LocalTime time = getValue();
-                    setValue(time.plusMinutes(steps));
-                }
+                setValue(getValue().plusMinutes(steps));
             }
         };
 
-        valueFactory.setValue(LocalTime.of(12, 0)); // Default value
-
+        valueFactory.setValue(LocalTime.now());
         timePicker.setValueFactory(valueFactory);
+    }
 
-        timePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            // Add any additional logic you might need
-        });
+    private void initializeDatePicker(){
+        datePicker.setValue(LocalDate.now());
     }
 }

@@ -61,6 +61,9 @@ public class HelloController {
         comboBoxDeparture.setValue("Kies station");
         comboBoxArrival.setValue("Kies station");
 
+        comboBoxDeparture.setVisibleRowCount(4);
+        comboBoxArrival.setVisibleRowCount(4);
+
         // Add an event listener to comboBoxDeparture to filter arrival options
         comboBoxDeparture.setOnAction(event -> updateArrivalOptions());
     }

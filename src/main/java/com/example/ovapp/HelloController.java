@@ -14,17 +14,16 @@ public class HelloController {
 
     private String Departure;
     private String Arrival;
-
+    ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
 
     @FXML
     private ChoiceBox<String> choiceBoxArrival;
     @FXML
+    private Label routeOutText;
+    @FXML
     private ChoiceBox<String> choiceBoxDeparture;
     @FXML
-    private Label routeOutText;
-
-    @FXML
-    private DatePicker datePicker;
+    private DatePicker datePicker;;
     @FXML
     private Spinner<LocalTime> timePicker;
 
@@ -39,7 +38,7 @@ public class HelloController {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            routeOutText.setText(String.format("Dit is de route:\nVan: %s\nNaar: %s\nOp: %s\nOm: %s uur",
+            routeOutText.setText(String.format("Dit is de route van %s naar %s op %s om %s uur",
                     Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
         } catch (NullPointerException e) {
             routeOutText.setText(" Vul A.U.B. alle velden in.");
@@ -50,11 +49,9 @@ public class HelloController {
     protected void initialize() {
         initializeChoiceBox();
         initializeTimePicker();
-        initializeDatePicker();
     }
 
     private void initializeChoiceBox() {
-        ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
 
         choiceBoxDeparture.setItems(stations);
         choiceBoxArrival.setItems(stations);
@@ -67,7 +64,7 @@ public class HelloController {
     private void initializeTimePicker() {
         SpinnerValueFactory<LocalTime> valueFactory = new SpinnerValueFactory<>() {
             {
-                setConverter(new StringConverter<>() {
+                setConverter(new StringConverter<LocalTime>() {
                     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
                     @Override
@@ -84,20 +81,27 @@ public class HelloController {
 
             @Override
             public void decrement(int steps) {
-                setValue(getValue().minusMinutes(steps));
+                if (getValue() != null) {
+                    LocalTime time = getValue();
+                    setValue(time.minusMinutes(steps));
+                }
             }
 
             @Override
             public void increment(int steps) {
-                setValue(getValue().plusMinutes(steps));
+                if (getValue() != null) {
+                    LocalTime time = getValue();
+                    setValue(time.plusMinutes(steps));
+                }
             }
         };
 
-        valueFactory.setValue(LocalTime.now());
-        timePicker.setValueFactory(valueFactory);
-    }
+        valueFactory.setValue(LocalTime.of(12, 0)); // Default value
 
-    private void initializeDatePicker(){
-        datePicker.setValue(LocalDate.now());
+        timePicker.setValueFactory(valueFactory);
+
+        timePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Add any additional logic you might need
+        });
     }
 }

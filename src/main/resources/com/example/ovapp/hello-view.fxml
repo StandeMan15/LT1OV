@@ -7,8 +7,8 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.HelloController">
     <children>
-        <ChoiceBox fx:id="choiceBoxDeparture" layoutX="243.0" layoutY="35.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
-        <ChoiceBox fx:id="choiceBoxArrival" layoutX="243.0" layoutY="91.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
+        <ComboBox fx:id="comboBoxDeparture" layoutX="243.0" layoutY="35.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
+        <ComboBox fx:id="comboBoxArrival" layoutX="243.0" layoutY="91.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
         <Button layoutX="342.0" layoutY="185.0" onAction="#SearchRoute" text="Zoek route">
             <font>
                 <Font size="24.0" />

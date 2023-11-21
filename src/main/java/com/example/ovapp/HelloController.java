@@ -52,7 +52,11 @@ public class HelloController {
     }
 
     private void initializeChoiceBox() {
+<<<<<<< HEAD
 
+=======
+        ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Enschede", "Schiphol");
+>>>>>>> thijn-zijn-fuckups-2.1
 
         choiceBoxDeparture.setItems(stations);
         choiceBoxArrival.setItems(stations);

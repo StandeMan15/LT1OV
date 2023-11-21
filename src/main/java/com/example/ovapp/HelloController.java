@@ -1,11 +1,10 @@
 package com.example.ovapp;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,20 +17,20 @@ public class HelloController {
     ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
 
     @FXML
-    private ComboBox<String> comboBoxArrival;
+    private ChoiceBox<String> choiceBoxArrival;
     @FXML
-    private ComboBox<String> comboBoxDeparture;
+    private ChoiceBox<String> choiceBoxDeparture;
     @FXML
     private Label routeOutText;
     @FXML
-    private DatePicker datePicker;
+    private DatePicker datePicker;;
     @FXML
     private Spinner<LocalTime> timePicker;
 
     @FXML
     protected void SearchRoute() {
-        Departure = comboBoxDeparture.getValue();
-        Arrival = comboBoxArrival.getValue();
+        Departure = choiceBoxDeparture.getValue();
+        Arrival = choiceBoxArrival.getValue();
         LocalDate selectedDate = datePicker.getValue();
         LocalTime selectedTime = timePicker.getValue();
 
@@ -39,7 +38,7 @@ public class HelloController {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            routeOutText.setText(String.format("Dit is de route:\nVan: %s\nNaar: %s\nOp: %s\nOm: %s uur",
+            routeOutText.setText(String.format("Dit is de route van %s naar %s op %s om %s uur",
                     Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
         } catch (NullPointerException e) {
             routeOutText.setText(" Vul A.U.B. alle velden in.");
@@ -48,41 +47,25 @@ public class HelloController {
 
     @FXML
     protected void initialize() {
-        initializeComboBoxes();
+        initializeChoiceBox();
         initializeTimePicker();
-        initializeDatePicker();
     }
 
-    private void initializeComboBoxes() {
-        comboBoxDeparture.setItems(stations);
-        comboBoxArrival.setItems(stations);
+    private void initializeChoiceBox() {
+
+
+        choiceBoxDeparture.setItems(stations);
+        choiceBoxArrival.setItems(stations);
 
         // Set a default selection (optional)
-        comboBoxDeparture.setValue("Kies station");
-        comboBoxArrival.setValue("Kies station");
+        choiceBoxDeparture.setValue(stations.get(0));
+        choiceBoxArrival.setValue(stations.get(0));
 
-        comboBoxDeparture.setVisibleRowCount(4);
-        comboBoxArrival.setVisibleRowCount(4);
-
-        // Add an event listener to comboBoxDeparture to filter arrival options
-        comboBoxDeparture.setOnAction(event -> updateArrivalOptions());
     }
-
-    private void updateArrivalOptions() {
-        String selectedOption = comboBoxDeparture.getValue();
-
-        FilteredList<String> filteredArrivalOptions = new FilteredList<>(stations);
-
-        filteredArrivalOptions.setPredicate(option -> !option.equals(selectedOption));
-        comboBoxArrival.setItems(filteredArrivalOptions);
-
-        comboBoxArrival.setValue(filteredArrivalOptions.isEmpty() ? null : filteredArrivalOptions.get(0));
-    }
-
     private void initializeTimePicker() {
         SpinnerValueFactory<LocalTime> valueFactory = new SpinnerValueFactory<>() {
             {
-                setConverter(new StringConverter<>() {
+                setConverter(new StringConverter<LocalTime>() {
                     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
                     @Override
@@ -99,20 +82,27 @@ public class HelloController {
 
             @Override
             public void decrement(int steps) {
-                setValue(getValue().minusMinutes(steps));
+                if (getValue() != null) {
+                    LocalTime time = getValue();
+                    setValue(time.minusMinutes(steps));
+                }
             }
 
             @Override
             public void increment(int steps) {
-                setValue(getValue().plusMinutes(steps));
+                if (getValue() != null) {
+                    LocalTime time = getValue();
+                    setValue(time.plusMinutes(steps));
+                }
             }
         };
 
-        valueFactory.setValue(LocalTime.now());
-        timePicker.setValueFactory(valueFactory);
-    }
+        valueFactory.setValue(LocalTime.of(12, 0)); // Default value
 
-    private void initializeDatePicker(){
-        datePicker.setValue(LocalDate.now());
+        timePicker.setValueFactory(valueFactory);
+
+        timePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Add any additional logic you might need
+        });
     }
 }

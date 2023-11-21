@@ -17,9 +17,9 @@ public class HelloController {
 
 
     @FXML
-    private ComboBox<String> choiceBoxArrival;
+    private ChoiceBox<String> choiceBoxArrival;
     @FXML
-    private ComboBox<String> choiceBoxDeparture;
+    private ChoiceBox<String> choiceBoxDeparture;
     @FXML
     private Label routeOutText;
 

@@ -38,6 +38,8 @@ public class HelloApplication extends Application {
 
         timeline.play();
 
+        //Magnifier magnifier = new Magnifier(scene);
+
         primaryStage.setScene(scene);
 
         primaryStage.show();

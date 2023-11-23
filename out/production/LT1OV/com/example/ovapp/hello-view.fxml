@@ -26,7 +26,10 @@
                 <Font size="30.0" />
             </font></Label>
 
-        <Label fx:id="time" layoutX="616.0" layoutY="35.0" text="Current Time" />
+        <Label fx:id="time" layoutX="63.0" layoutY="559.0" text="Current Time" textFill="#fc0000">
+         <font>
+            <Font size="96.0" />
+         </font></Label>
 
         <DatePicker fx:id="datePicker" layoutX="416.0" layoutY="138.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
         <Spinner fx:id="timePicker" layoutX="243.0" layoutY="138.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />

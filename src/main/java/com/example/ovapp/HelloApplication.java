@@ -26,19 +26,9 @@ public class HelloApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 900, 800);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
 
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), event -> {
-                    primaryStage.setTitle("OV Application - " + getCurrentTime());
-                })
-        );
-
-        timeline.setCycleCount(Timeline.INDEFINITE);
-
-        timeline.play();
-
-        //Magnifier magnifier = new Magnifier(scene);
+        primaryStage.setTitle("OV Application");
 
         primaryStage.setScene(scene);
 
@@ -46,17 +36,7 @@ public class HelloApplication extends Application {
 
     }
 
-    /**
-     * Get the current time as a formatted string.
-     *
-     * @return A string representing the current time.
-     */
-    private String getCurrentTime() {
-        LocalTime currentTime = LocalTime.now();
-        return "Current Time: " + currentTime.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
-    }
-
-    /**
+     /**
      * Main method to launch the application.
      *
      * @param args Command-line arguments.

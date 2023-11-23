@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.HelloController">
     <children>
         <ComboBox fx:id="comboBoxDeparture" layoutX="243.0" layoutY="35.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
         <ComboBox fx:id="comboBoxArrival" layoutX="243.0" layoutY="91.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
@@ -25,12 +26,6 @@
             <font>
                 <Font size="30.0" />
             </font></Label>
-
-        <Label fx:id="time" layoutX="63.0" layoutY="559.0" text="Current Time" textFill="#fc0000">
-         <font>
-            <Font size="96.0" />
-         </font></Label>
-
         <DatePicker fx:id="datePicker" layoutX="416.0" layoutY="138.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
         <Spinner fx:id="timePicker" layoutX="243.0" layoutY="138.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />
         <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="69.0" layoutY="244.0" prefHeight="305.0" prefWidth="502.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" wrapText="true">

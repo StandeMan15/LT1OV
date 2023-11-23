@@ -17,14 +17,15 @@ import java.util.Date;
 
 public class HelloController {
 
-    private String Departure;
-    private String Arrival;
     ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
+    ObservableList<String> vehicles = FXCollections.observableArrayList("bus", "trein");
 
     @FXML
-    private ComboBox<String> comboBoxArrival;
+    private ComboBox<String> arrivalComboBox;
     @FXML
-    private ComboBox<String> comboBoxDeparture;
+    private ComboBox<String> departureComboBox;
+    @FXML
+    private ComboBox<String> vehicleSelectionComboBox;
     @FXML
     private Label routeOutText;
     @FXML
@@ -38,8 +39,9 @@ public class HelloController {
 
     @FXML
     protected void SearchRoute() {
-        Departure = comboBoxDeparture.getValue();
-        Arrival = comboBoxArrival.getValue();
+        String Departure = departureComboBox.getValue();
+        String Arrival = arrivalComboBox.getValue();
+        String Vehicle = vehicleSelectionComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
         LocalTime selectedTime = timePicker.getValue();
 
@@ -47,8 +49,8 @@ public class HelloController {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            routeOutText.setText(String.format("Dit is de route:\nVan: %s\nNaar: %s\nOp: %s\nOm: %s uur",
-                    Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
+            routeOutText.setText(String.format("Dit is de %s route:\nVan: %s\nNaar: %s\nOp: %s\nOm: %s uur",
+                    Vehicle, Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
         } catch (NullPointerException e) {
             routeOutText.setText(" Vul A.U.B. alle velden in.");
         }
@@ -70,29 +72,33 @@ public class HelloController {
     }
 
     private void initializeComboBoxes() {
-        comboBoxDeparture.setItems(stations);
-        comboBoxArrival.setItems(stations);
+        departureComboBox.setItems(stations);
+        arrivalComboBox.setItems(stations);
+        vehicleSelectionComboBox.setItems(vehicles);
 
         // Set a default selection (optional)
-        comboBoxDeparture.setValue("Kies station");
-        comboBoxArrival.setValue("Kies station");
+        departureComboBox.setValue("Kies station");
+        arrivalComboBox.setValue("Kies station");
+        vehicleSelectionComboBox.setValue("Kies Voertuig");
 
-        comboBoxDeparture.setVisibleRowCount(4);
-        comboBoxArrival.setVisibleRowCount(4);
 
-        // Add an event listener to comboBoxDeparture to filter arrival options
-        comboBoxDeparture.setOnAction(event -> updateArrivalOptions());
+        departureComboBox.setVisibleRowCount(4);
+        arrivalComboBox.setVisibleRowCount(4);
+        vehicleSelectionComboBox.setVisibleRowCount(3);
+
+        // Add an event listener to departureComboBox to filter arrival options
+        departureComboBox.setOnAction(event -> updateArrivalOptions());
     }
 
     private void updateArrivalOptions() {
-        String selectedOption = comboBoxDeparture.getValue();
+        String selectedOption = departureComboBox.getValue();
 
         FilteredList<String> filteredArrivalOptions = new FilteredList<>(stations);
 
         filteredArrivalOptions.setPredicate(option -> !option.equals(selectedOption));
-        comboBoxArrival.setItems(filteredArrivalOptions);
+        arrivalComboBox.setItems(filteredArrivalOptions);
 
-        comboBoxArrival.setValue(filteredArrivalOptions.isEmpty() ? null : filteredArrivalOptions.get(0));
+        arrivalComboBox.setValue(filteredArrivalOptions.isEmpty() ? null : filteredArrivalOptions.get(0));
     }
 
     private void initializeTimePicker() {

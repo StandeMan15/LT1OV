@@ -1,15 +1,19 @@
 package com.example.ovapp;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class HelloController {
 
@@ -27,6 +31,10 @@ public class HelloController {
     private DatePicker datePicker;
     @FXML
     private Spinner<LocalTime> timePicker;
+    @FXML
+    private Label time;
+    @FXML
+    private volatile boolean stop = false;
 
     @FXML
     protected void SearchRoute() {
@@ -47,11 +55,18 @@ public class HelloController {
     }
 
     @FXML
+    private void Close_clicked(MouseEvent event){
+        stop = true;
+        javafx.application.Platform.exit();
+    }
+
+    @FXML
     protected void initialize() {
         System.out.println("Controller initialized.");
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
+        Timenow();
     }
 
     private void initializeComboBoxes() {
@@ -115,5 +130,24 @@ public class HelloController {
 
     private void initializeDatePicker(){
         datePicker.setValue(LocalDate.now());
+    }
+
+    @FXML
+    private void Timenow(){
+        Thread thread = new Thread(() -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+            while(!stop){
+                try{
+                    Thread.sleep(1000);
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+                final String timenow = sdf.format(new Date());
+                Platform.runLater(() -> {
+                    time.setText(timenow);
+                });
+            }
+        });
+        thread.start();
     }
 }

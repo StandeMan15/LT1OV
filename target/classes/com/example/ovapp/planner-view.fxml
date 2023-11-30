@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.PlannerController">
     <children>
         <ComboBox fx:id="departureComboBox" layoutX="243.0" layoutY="27.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
         <ComboBox fx:id="arrivalComboBox" layoutX="243.0" layoutY="80.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
@@ -27,9 +27,9 @@
             </font></Label>
 
         <Label fx:id="time" layoutX="63.0" layoutY="599.0" text="Current Time" textFill="#fc0000">
-         <font>
-            <Font size="96.0" />
-         </font></Label>
+            <font>
+                <Font size="96.0" />
+            </font></Label>
 
         <DatePicker fx:id="datePicker" layoutX="416.0" layoutY="138.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
         <Spinner fx:id="timePicker" layoutX="243.0" layoutY="138.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />
@@ -41,11 +41,11 @@
                 <Font size="30.0" />
             </font>
         </Label>
-      <ComboBox fx:id="vehicleSelectionComboBox" layoutX="244.0" layoutY="194.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
-      <Label layoutX="70.0" layoutY="193.0" text="Vervoer">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
+        <ComboBox fx:id="vehicleSelectionComboBox" layoutX="244.0" layoutY="194.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
+        <Label layoutX="70.0" layoutY="193.0" text="Vervoer">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Label>
     </children>
 </Pane>

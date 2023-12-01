@@ -15,6 +15,22 @@
             <font>
                 <Font size="24.0" />
             </font></Button>
+        <Button fx:id="languageNLButton" layoutX="842.0" layoutY="26.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView fitHeight="37.0" fitWidth="61.0">
+                    <Image url="@images/Flag_of_the_Netherlands.png" />
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="languageENButton" layoutX="756.0" layoutY="26.0" mnemonicParsing="false">
+            <graphic>
+                <ImageView fitHeight="37.0" fitWidth="61.0">
+                    <image>
+                        <Image url="@images/Flag_of_the_United_Kingdom.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
         <Label fx:id="departLabel" layoutX="70.0" layoutY="26.0">
             <font>
                 <Font size="30.0" />
@@ -46,21 +62,5 @@
         </Label>
         <DatePicker fx:id="datePicker" layoutX="416.0" layoutY="138.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
         <Spinner fx:id="timePicker" layoutX="243.0" layoutY="138.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />
-      <Button layoutX="842.0" layoutY="26.0" mnemonicParsing="false">
-          <graphic>
-              <ImageView fitHeight="37.0" fitWidth="61.0">
-                  <Image url="@images/Flag_of_the_Netherlands.png" />
-              </ImageView>
-          </graphic>
-      </Button>
-      <Button layoutX="756.0" layoutY="26.0" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="37.0" fitWidth="61.0">
-               <image>
-                  <Image url="@images/Flag_of_the_United_Kingdom.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
     </children>
 </Pane>

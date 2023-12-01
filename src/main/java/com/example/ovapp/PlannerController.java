@@ -29,6 +29,10 @@ public class PlannerController {
     @FXML
     private Button searchButton;
     @FXML
+    private Button languageNLButton;
+    @FXML
+    private Button languageENButton;
+    @FXML
     private Label routeOutText;
     @FXML
     private Label departLabel;
@@ -75,11 +79,12 @@ public class PlannerController {
     @FXML
     protected void initialize() {
         System.out.println("Controller initialized.");
-        Translator.setLanguage("en");
+        Translator.setLanguage("nl");
         updateUI();
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
+        initializeLanguageButtens();
         Timenow();
     }
 
@@ -95,6 +100,11 @@ public class PlannerController {
         timeDateLabel.setText(Translator.translate("time_date_label"));
         transportLabel.setText(Translator.translate("transport_label"));
 
+    }
+
+    private void initializeLanguageButtens(){
+        languageNLButton.setOnAction(event -> changeLanguage("nl"));
+        languageENButton.setOnAction(event -> changeLanguage("en"));
     }
 
     private void initializeComboBoxes() {

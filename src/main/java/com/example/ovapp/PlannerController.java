@@ -18,7 +18,7 @@ import java.util.Date;
 public class PlannerController {
 
     ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
-    ObservableList<String> vehicles = FXCollections.observableArrayList("bus", "trein");
+    ObservableList<String> vehicles = FXCollections.observableArrayList("bus", "train");
 
     @FXML
     private ComboBox<String> arrivalComboBox;
@@ -63,10 +63,10 @@ public class PlannerController {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            routeOutText.setText(String.format("Dit is de %s route:\nVan: %s\nNaar: %s\nOp: %s\nOm: %s uur",
+            routeOutText.setText(String.format(Translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
         } catch (NullPointerException e) {
-            routeOutText.setText(" Vul A.U.B. alle velden in.");
+            routeOutText.setText(Translator.translate("empty_field"));
         }
     }
 
@@ -80,12 +80,12 @@ public class PlannerController {
     protected void initialize() {
         System.out.println("Controller initialized.");
         Translator.setLanguage("nl");
-        updateUI();
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
         initializeLanguageButtens();
         Timenow();
+        updateUI();
     }
 
     public void changeLanguage(String language) {
@@ -99,6 +99,7 @@ public class PlannerController {
         arrivalLabel.setText(Translator.translate("arrival_label"));
         timeDateLabel.setText(Translator.translate("time_date_label"));
         transportLabel.setText(Translator.translate("transport_label"));
+        vehicleSelectionComboBox.setItems(translateList(vehicles));
 
     }
 
@@ -110,7 +111,6 @@ public class PlannerController {
     private void initializeComboBoxes() {
         departureComboBox.setItems(stations);
         arrivalComboBox.setItems(stations);
-        vehicleSelectionComboBox.setItems(vehicles);
 
         // Set a default selection (optional)
         departureComboBox.setValue(stations.get(0));
@@ -124,6 +124,14 @@ public class PlannerController {
 
         // Add an event listener to departureComboBox to filter arrival options
         departureComboBox.setOnAction(event -> updateArrivalOptions());
+    }
+
+    private ObservableList<String> translateList(ObservableList<String> list) {
+        ObservableList<String> translatedList = FXCollections.observableArrayList();
+        for (String item : list) {
+            translatedList.add(Translator.translate(item));
+        }
+        return translatedList;
     }
 
     private void updateArrivalOptions() {

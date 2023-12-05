@@ -24,4 +24,5 @@ public class Translator {
             return "Translation not found";
         }
     }
+
 }

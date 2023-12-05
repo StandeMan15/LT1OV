@@ -21,7 +21,7 @@ public class Translator {
             return messages.getString(key);
         } catch (Exception e) {
             System.err.println("Key not found: " + key);
-            return "";
+            return "Translation not found";
         }
     }
 }

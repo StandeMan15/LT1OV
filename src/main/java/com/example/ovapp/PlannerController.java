@@ -27,13 +27,27 @@ public class PlannerController {
     @FXML
     private ComboBox<String> vehicleSelectionComboBox;
     @FXML
+    private Button searchButton;
+    @FXML
+    private Button languageNLButton;
+    @FXML
+    private Button languageENButton;
+    @FXML
     private Label routeOutText;
+    @FXML
+    private Label departLabel;
+    @FXML
+    private Label arrivalLabel;
+    @FXML
+    private Label timeDateLabel;
+    @FXML
+    private Label transportLabel;
+    @FXML
+    private Label time;
     @FXML
     private DatePicker datePicker;
     @FXML
     private Spinner<LocalTime> timePicker;
-    @FXML
-    private Label time;
     @FXML
     private volatile boolean stop = false;
 
@@ -65,10 +79,32 @@ public class PlannerController {
     @FXML
     protected void initialize() {
         System.out.println("Controller initialized.");
+        Translator.setLanguage("nl");
+        updateUI();
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
+        initializeLanguageButtens();
         Timenow();
+    }
+
+    public void changeLanguage(String language) {
+        Translator.setLanguage(language);
+        updateUI();
+    }
+
+    private void updateUI() {
+        searchButton.setText(Translator.translate("button_searchroute"));
+        departLabel.setText(Translator.translate("depart_label"));
+        arrivalLabel.setText(Translator.translate("arrival_label"));
+        timeDateLabel.setText(Translator.translate("time_date_label"));
+        transportLabel.setText(Translator.translate("transport_label"));
+
+    }
+
+    private void initializeLanguageButtens(){
+        languageNLButton.setOnAction(event -> changeLanguage("nl"));
+        languageENButton.setOnAction(event -> changeLanguage("en"));
     }
 
     private void initializeComboBoxes() {
@@ -77,9 +113,9 @@ public class PlannerController {
         vehicleSelectionComboBox.setItems(vehicles);
 
         // Set a default selection (optional)
-        departureComboBox.setValue("Kies station");
-        arrivalComboBox.setValue("Kies station");
-        vehicleSelectionComboBox.setValue("Kies Voertuig");
+        departureComboBox.setValue(stations.get(0));
+        arrivalComboBox.setValue(stations.get(1));
+        vehicleSelectionComboBox.setValue(vehicles.get(0));
 
 
         departureComboBox.setVisibleRowCount(4);

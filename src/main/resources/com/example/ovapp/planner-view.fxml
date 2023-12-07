@@ -6,12 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.PlannerController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.PlannerController" style="-fx-background-image: url('file:src/main/resources/com/example/ovapp/images/Achtergrond_OVApp.png'); -fx-background-size: cover; -fx-background-position: center center;">
     <children>
+
         <ComboBox fx:id="departureComboBox" layoutX="243.0" layoutY="27.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
-        <ComboBox fx:id="arrivalComboBox" layoutX   ="243.0" layoutY="80.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
-        <ComboBox fx:id="vehicleSelectionComboBox" layoutX="244.0" layoutY="194.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
-        <Button fx:id="searchButton" layoutX="588.0" layoutY="287.0" onAction="#SearchRoute" text="Zoek route">
+        <ComboBox fx:id="arrivalComboBox" layoutX="243.0" layoutY="80.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
+        <ComboBox fx:id="vehicleSelectionComboBox" layoutX="243.0" layoutY="135.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
+        <Button fx:id="searchButton" layoutX="586.0" layoutY="586.0" onAction="#SearchRoute" text="Zoek route">
             <font>
                 <Font size="24.0" />
             </font></Button>
@@ -39,20 +40,20 @@
             <font>
                 <Font size="30.0" />
             </font></Label>
-        <Label fx:id="timeDateLabel" layoutX="70.0" layoutY="134.0">
+        <Label fx:id="transportLabel" layoutX="70.0" layoutY="134.0">
             <font>
                 <Font size="30.0" />
             </font></Label>
-        <Label fx:id="transportLabel" layoutX="70.0" layoutY="193.0">
+        <Label fx:id="timeDateLabel" layoutX="70.0" layoutY="193.0">
             <font>
                 <Font size="30.0" />
             </font>
         </Label>
-        <Label fx:id="time" layoutX="63.0" layoutY="599.0" text="Current Time" textFill="#fc0000">
+        <Label fx:id="time" layoutX="747.0" layoutY="89.0" prefHeight="70.0" prefWidth="177.0" text="10:30:10" textFill="#fc0000">
             <font>
-                <Font size="96.0" />
+                <Font size="48.0" />
             </font></Label>
-        <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="70.0" layoutY="287.0" prefHeight="305.0" prefWidth="502.0" style=" -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" wrapText="true">
+        <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="70.0" layoutY="287.0" prefHeight="305.0" prefWidth="502.0" style="-fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" wrapText="true">
             <opaqueInsets>
                 <Insets />
             </opaqueInsets>
@@ -60,7 +61,10 @@
                 <Font size="30.0" />
             </font>
         </Label>
-        <DatePicker fx:id="datePicker" layoutX="416.0" layoutY="138.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
-        <Spinner fx:id="timePicker" layoutX="243.0" layoutY="138.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />
+        <DatePicker fx:id="datePicker" layoutX="412.0" layoutY="194.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
+        <Spinner fx:id="timePicker" layoutX="244.0" layoutY="194.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />
     </children>
+    <opaqueInsets>
+        <Insets />
+    </opaqueInsets>
 </Pane>

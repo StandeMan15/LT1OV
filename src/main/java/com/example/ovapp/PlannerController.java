@@ -14,6 +14,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
+
+import static javax.swing.JComponent.setDefaultLocale;
+
 
 public class PlannerController {
 
@@ -60,7 +64,7 @@ public class PlannerController {
         LocalTime selectedTime = timePicker.getValue();
 
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Translator.translate("date_format"));
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
             routeOutText.setText(String.format(Translator.translate("route_message"),
@@ -99,13 +103,20 @@ public class PlannerController {
         arrivalLabel.setText(Translator.translate("arrival_label"));
         timeDateLabel.setText(Translator.translate("time_date_label"));
         transportLabel.setText(Translator.translate("transport_label"));
-        vehicleSelectionComboBox.setItems(translateList(vehicles));
 
+        datePicker.setConverter(createDateConverter());
+        datePicker.setValue(datePicker.getValue());
+
+        vehicleSelectionComboBox.setItems(translateList(vehicles));
     }
 
     private void initializeLanguageButtens(){
-        languageNLButton.setOnAction(event -> changeLanguage("nl"));
-        languageENButton.setOnAction(event -> changeLanguage("en"));
+        languageNLButton.setOnAction(event -> {
+            changeLanguage("nl");
+        });
+        languageENButton.setOnAction(event -> {
+            changeLanguage("en");
+        });
     }
 
     private void initializeComboBoxes() {
@@ -180,6 +191,22 @@ public class PlannerController {
 
     private void initializeDatePicker(){
         datePicker.setValue(LocalDate.now());
+    }
+
+    private StringConverter<LocalDate> createDateConverter() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Translator.translate("date_format"));
+
+        return new StringConverter<>() {
+            @Override
+            public String toString(LocalDate date) {
+                return (date != null) ? dateFormatter.format(date) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                return (string != null && !string.isEmpty()) ? LocalDate.parse(string, dateFormatter) : null;
+            }
+        };
     }
 
     @FXML

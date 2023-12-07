@@ -60,8 +60,8 @@
                 <Font size="30.0" />
             </font>
         </Label>
-        <DatePicker fx:id="datePicker" layoutX="412.0" layoutY="194.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
-        <Spinner fx:id="timePicker" layoutX="244.0" layoutY="194.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />
+        <DatePicker fx:id="datePicker" layoutX="416.0" layoutY="138.0" prefHeight="38.0" prefWidth="190.0" style="-fx-font-size: 20;" />
+        <Spinner fx:id="timePicker" layoutX="243.0" layoutY="138.0" prefHeight="43.0" prefWidth="155.0" style="-fx-font-size: 20;" />
     </children>
     <opaqueInsets>
         <Insets />

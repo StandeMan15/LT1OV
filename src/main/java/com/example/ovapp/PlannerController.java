@@ -10,6 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +51,9 @@ public class PlannerController {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private Spinner<LocalTime> timePicker;
+    private Spinner<Integer> hourSpinner;
+    @FXML
+    private Spinner<Integer> minuteSpinner;
     @FXML
     private volatile boolean stop = false;
 
@@ -59,14 +63,15 @@ public class PlannerController {
         String Arrival = arrivalComboBox.getValue();
         String Vehicle = vehicleSelectionComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
-        LocalTime selectedTime = timePicker.getValue();
+        Integer hourTime = hourSpinner.getValue();
+        Integer minuteTime = minuteSpinner.getValue();
 
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Translator.translate("date_format"));
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
             routeOutText.setText(String.format(Translator.translate("route_message"),
-                    Vehicle, Departure, Arrival, selectedDate.format(dateFormatter), selectedTime.format(timeFormatter)));
+                    Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
+                    String.format("%02d", hourTime), String.format("%02d", minuteTime)));
         } catch (NullPointerException e) {
             routeOutText.setText(Translator.translate("empty_field"));
         }
@@ -153,36 +158,30 @@ public class PlannerController {
     }
 
     private void initializeTimePicker() {
-        SpinnerValueFactory<LocalTime> valueFactory = new SpinnerValueFactory<>() {
-            {
-                setConverter(new StringConverter<>() {
-                    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime currentTime = LocalTime.now();
+        NumberFormat twoDigitFormat = NumberFormat.getIntegerInstance();
+        twoDigitFormat.setMinimumIntegerDigits(2);
 
-                    @Override
-                    public String toString(LocalTime value) {
-                        return formatter.format(value);
-                    }
+        initializeSpinner(hourSpinner, 0, 23, currentTime.getHour(), twoDigitFormat);
+        initializeSpinner(minuteSpinner, 0, 59, currentTime.getMinute(), twoDigitFormat);
+    }
 
-                    @Override
-                    public LocalTime fromString(String text) {
-                        return LocalTime.parse(text, formatter);
-                    }
-                });
+    private void initializeSpinner(Spinner<Integer> spinner, int min, int max, int initialValue, NumberFormat format) {
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, initialValue);
+
+        valueFactory.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Integer value) {
+                return format.format(value);
             }
 
             @Override
-            public void decrement(int steps) {
-                setValue(getValue().minusMinutes(steps));
+            public Integer fromString(String string) {
+                return Integer.parseInt(string);
             }
+        });
 
-            @Override
-            public void increment(int steps) {
-                setValue(getValue().plusMinutes(steps));
-            }
-        };
-
-        valueFactory.setValue(LocalTime.now());
-        timePicker.setValueFactory(valueFactory);
+        spinner.setValueFactory(valueFactory);
     }
 
     private void initializeDatePicker(){
@@ -208,7 +207,7 @@ public class PlannerController {
     @FXML
     private void Timenow(){
         Thread thread = new Thread(() -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             while(!stop){
                 try{
                     Thread.sleep(1000);

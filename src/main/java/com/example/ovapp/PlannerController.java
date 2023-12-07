@@ -16,8 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-import static javax.swing.JComponent.setDefaultLocale;
-
 
 public class PlannerController {
 
@@ -84,10 +82,11 @@ public class PlannerController {
     protected void initialize() {
         System.out.println("Controller initialized.");
         Translator.setLanguage("nl");
+        Locale.setDefault(new Locale("en"));
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
-        initializeLanguageButtens();
+        initializeLanguageButtons();
         Timenow();
         updateUI();
     }
@@ -110,13 +109,9 @@ public class PlannerController {
         vehicleSelectionComboBox.setItems(translateList(vehicles));
     }
 
-    private void initializeLanguageButtens(){
-        languageNLButton.setOnAction(event -> {
-            changeLanguage("nl");
-        });
-        languageENButton.setOnAction(event -> {
-            changeLanguage("en");
-        });
+    private void initializeLanguageButtons(){
+        languageNLButton.setOnAction(event -> changeLanguage("nl"));
+        languageENButton.setOnAction(event -> changeLanguage("en"));
     }
 
     private void initializeComboBoxes() {
@@ -220,9 +215,7 @@ public class PlannerController {
                     System.out.println(e);
                 }
                 final String timenow = sdf.format(new Date());
-                Platform.runLater(() -> {
-                    time.setText(timenow);
-                });
+                Platform.runLater(() -> time.setText(timenow));
             }
         });
         thread.start();

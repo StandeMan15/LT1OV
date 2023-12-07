@@ -82,7 +82,7 @@ public class PlannerController {
     protected void initialize() {
         System.out.println("Controller initialized.");
         Translator.setLanguage("nl");
-        Locale.setDefault(new Locale("en"));
+        Locale.setDefault(new Locale("nl"));
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
@@ -93,6 +93,7 @@ public class PlannerController {
 
     public void changeLanguage(String language) {
         Translator.setLanguage(language);
+        Locale.setDefault(new Locale(language));
         updateUI();
     }
 

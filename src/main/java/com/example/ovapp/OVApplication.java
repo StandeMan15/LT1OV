@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Locale;
 
 /**
  * JavaFX OV application with automatic time refresh in the title.
@@ -22,7 +21,6 @@ public class OVApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(OVApplication.class.getResource("planner-view.fxml"));
-        Locale.setDefault(new Locale("en")); // Nederlands
 
         Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
 

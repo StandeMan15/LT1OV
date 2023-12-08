@@ -109,6 +109,8 @@ public class PlannerController {
         timeDateLabel.setText(Translator.translate("time_date_label"));
         transportLabel.setText(Translator.translate("transport_label"));
 
+        if (!routeOutText.getText().isEmpty()) SearchRoute();
+
         datePicker.setConverter(createDateConverter());
         datePicker.setValue(datePicker.getValue());
 

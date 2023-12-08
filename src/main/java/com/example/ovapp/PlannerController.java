@@ -207,7 +207,7 @@ public class PlannerController {
     @FXML
     private void Timenow(){
         Thread thread = new Thread(() -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             while(!stop){
                 try{
                     Thread.sleep(1000);

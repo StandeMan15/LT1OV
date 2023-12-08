@@ -48,7 +48,7 @@
                 <Font size="30.0" />
             </font>
         </Label>
-        <Label fx:id="time" layoutX="744.0" layoutY="83.0" prefHeight="76.0" prefWidth="190.0" text="10:30:10" textFill="#fc0000">
+        <Label fx:id="time" layoutX="773.0" layoutY="79.0" prefHeight="76.0" prefWidth="119.0" text="10:30" textFill="#fc0000">
             <font>
                 <Font size="48.0" />
             </font></Label>

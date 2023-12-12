@@ -164,12 +164,12 @@ public class PlannerController {
         NumberFormat twoDigitFormat = NumberFormat.getIntegerInstance();
         twoDigitFormat.setMinimumIntegerDigits(2);
 
-        initializeSpinner(hourSpinner, 0, 23, currentTime.getHour(), twoDigitFormat);
-        initializeSpinner(minuteSpinner, 0, 59, currentTime.getMinute(), twoDigitFormat);
+        initializeSpinner(hourSpinner, 23, currentTime.getHour(), twoDigitFormat);
+        initializeSpinner(minuteSpinner, 59, currentTime.getMinute(), twoDigitFormat);
     }
 
-    private void initializeSpinner(Spinner<Integer> spinner, int min, int max, int initialValue, NumberFormat format) {
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, initialValue);
+    private void initializeSpinner(Spinner<Integer> spinner, int max, int initialValue, NumberFormat format) {
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, max, initialValue);
 
         valueFactory.setConverter(new StringConverter<>() {
             @Override

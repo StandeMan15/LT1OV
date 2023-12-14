@@ -6,117 +6,113 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-image: url('file:src/main/resources/com/example/ovapp/images/OVApp_Achtergrond.png'); -fx-background-size: cover; -fx-background-position: center center;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.PlannerController">
-    <children>
-        <Button fx:id="searchButton" layoutX="587.0" layoutY="597.0" onAction="#SearchRoute" text="Zoek route">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
+      prefWidth="1000.0"
+      style="-fx-background-image: url('file:src/main/resources/com/example/ovapp/images/OVApp_Achtergrond.png'); -fx-background-size: cover; -fx-background-position: center center;"
+      xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ovapp.PlannerController">
+    <opaqueInsets>
+        <Insets/>
+    </opaqueInsets>
+    <Button fx:id="searchButton" layoutX="587.0" layoutY="597.0" onAction="#SearchRoute" text="Zoek route">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Button>
+    <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="71.0" layoutY="343.0" prefHeight="305.0" prefWidth="502.0"
+           style="-fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"
+           textFill="#fc0000" wrapText="true">
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+        <font>
+            <Font size="30.0"/>
+        </font>
+    </Label>
+    <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="1000.0" spacing="10.0"
+          style="-fx-background-color: #FFAE00;">
+        <ImageView fitHeight="148.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
+            <HBox.margin>
+                <Insets right="520.0"/>
+            </HBox.margin>
+            <Image url="@images/OVLogo.png"/>
+        </ImageView>
+        <Label fx:id="time" prefHeight="70.0" prefWidth="125.0" text="10:30">
             <font>
-                <Font size="24.0" />
-            </font></Button>
-        <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="71.0" layoutY="343.0" prefHeight="305.0" prefWidth="502.0" style="-fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" textFill="#fc0000" wrapText="true">
-            <opaqueInsets>
-                <Insets />
-            </opaqueInsets>
-            <font>
-                <Font size="30.0" />
+                <Font size="48.0"/>
             </font>
         </Label>
-      <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="1000.0" spacing="10.0" style="-fx-background-color: #FFAE00;">
-         <children>
-            <ImageView fitHeight="148.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/OVLogo.png" />
-               </image>
-               <HBox.margin>
-                  <Insets right="520.0" />
-               </HBox.margin>
-            </ImageView>
-              <Label fx:id="time" prefHeight="70.0" prefWidth="125.0" text="10:30">
-                  <font>
-                      <Font size="48.0" />
-                  </font>
+        <Button fx:id="languageNLButton" mnemonicParsing="false">
+            <graphic>
+                <ImageView fitHeight="37.0" fitWidth="61.0">
+                    <Image url="@images/Flag_of_the_Netherlands.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="languageENButton" mnemonicParsing="false">
+            <graphic>
+                <ImageView fitHeight="37.0" fitWidth="61.0">
+                    <viewport>
+                        <Rectangle2D/>
+                    </viewport>
+                    <Image url="@images/Flag_of_the_United_Kingdom.png"/>
+                </ImageView>
+            </graphic>
+            <HBox.margin>
+                <Insets right="10.0"/>
+            </HBox.margin>
+        </Button>
+    </HBox>
+    <HBox alignment="TOP_RIGHT" layoutX="74.0" layoutY="105.0" prefHeight="190.0" prefWidth="590.0">
+        <VBox prefHeight="190.0" prefWidth="352.0" spacing="2.0">
+            <Label fx:id="departLabel">
+                <font>
+                    <Font size="30.0"/>
+                </font>
             </Label>
-              <Button fx:id="languageNLButton" mnemonicParsing="false">
-                  <graphic>
-                      <ImageView fitHeight="37.0" fitWidth="61.0">
-                          <Image url="@images/Flag_of_the_Netherlands.png" />
-                      </ImageView>
-                  </graphic>
-              </Button>
-              <Button fx:id="languageENButton" mnemonicParsing="false">
-                  <graphic>
-                      <ImageView fitHeight="37.0" fitWidth="61.0">
-                          <image>
-                              <Image url="@images/Flag_of_the_United_Kingdom.png" />
-                          </image>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
-                      </ImageView>
-                  </graphic>
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-              </Button>
-         </children></HBox>
-      <HBox alignment="TOP_RIGHT" layoutX="74.0" layoutY="105.0" prefHeight="190.0" prefWidth="590.0">
-         <children>
-            <VBox prefHeight="190.0" prefWidth="352.0" spacing="2.0">
-               <children>
-                    <Label fx:id="departLabel">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                  </Label>
-                    <Label fx:id="arrivalLabel">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                  </Label>
-                    <Label fx:id="transportLabel">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                  </Label>
-                    <Label fx:id="timeDateLabel">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                    </Label>
-               </children></VBox>
-            <VBox prefHeight="190.0" prefWidth="368.0" spacing="5.0">
-               <children>
-                    <ComboBox fx:id="departureComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets></ComboBox>
-                    <ComboBox fx:id="arrivalComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;" />
-                    <ComboBox fx:id="vehicleSelectionComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;" />
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                          <Spinner fx:id="hourSpinner" prefHeight="43.0" prefWidth="101.0" style="-fx-font-size: 20;" />
-                          <Spinner fx:id="minuteSpinner" prefHeight="43.0" prefWidth="101.0" style="-fx-font-size: 20;" />
-                     </children>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </VBox>
-            <VBox alignment="BOTTOM_LEFT" prefHeight="190.0" prefWidth="337.0">
-               <children>
-                    <DatePicker fx:id="datePicker" prefHeight="43.0" prefWidth="196.0" style="-fx-font-size: 20;" />
-               </children>
-               <padding>
-                  <Insets bottom="3.0" />
-               </padding>
-            </VBox>
-         </children>
-      </HBox>
-    </children>
-    <opaqueInsets>
-        <Insets />
-    </opaqueInsets>
+            <Label fx:id="arrivalLabel">
+                <font>
+                    <Font size="30.0"/>
+                </font>
+            </Label>
+            <Label fx:id="transportLabel">
+                <font>
+                    <Font size="30.0"/>
+                </font>
+            </Label>
+            <Label fx:id="timeDateLabel">
+                <font>
+                    <Font size="30.0"/>
+                </font>
+            </Label>
+        </VBox>
+        <VBox prefHeight="190.0" prefWidth="368.0" spacing="5.0">
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+            <HBox.margin>
+                <Insets/>
+            </HBox.margin>
+            <ComboBox fx:id="departureComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;">
+                <opaqueInsets>
+                    <Insets/>
+                </opaqueInsets>
+            </ComboBox>
+            <ComboBox fx:id="arrivalComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;"/>
+            <ComboBox fx:id="vehicleSelectionComboBox" prefHeight="43.0" prefWidth="203.0"
+                      style="-fx-font-size: 20;"/>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+                <Spinner fx:id="hourSpinner" prefHeight="43.0" prefWidth="101.0"
+                         style="-fx-font-size: 20;"/>
+                <Spinner fx:id="minuteSpinner" prefHeight="43.0" prefWidth="101.0"
+                         style="-fx-font-size: 20;"/>
+            </HBox>
+        </VBox>
+        <VBox alignment="BOTTOM_LEFT" prefHeight="190.0" prefWidth="337.0">
+            <padding>
+                <Insets bottom="3.0"/>
+            </padding>
+            <DatePicker fx:id="datePicker" prefHeight="43.0" prefWidth="196.0" style="-fx-font-size: 20;"/>
+        </VBox>
+    </HBox>
 </Pane>

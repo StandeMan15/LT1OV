@@ -131,7 +131,6 @@ public class PlannerController {
         arrivalComboBox.setValue(stations.get(1));
         vehicleSelectionComboBox.setValue(vehicles.get(0));
 
-
         departureComboBox.setVisibleRowCount(4);
         arrivalComboBox.setVisibleRowCount(4);
         vehicleSelectionComboBox.setVisibleRowCount(3);

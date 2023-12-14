@@ -8,7 +8,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
       prefWidth="1000.0"
-      style="-fx-background-image: url('file:src/main/resources/com/example/ovapp/images/Achtergrond_OVApp.png'); -fx-background-size: cover; -fx-background-position: center center;"
+      style="-fx-background-image: url('file:src/main/resources/com/example/ovapp/images/OVApp_Achtergrond.png'); -fx-background-size: cover; -fx-background-position: center center;"
       xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.ovapp.PlannerController">
     <opaqueInsets>

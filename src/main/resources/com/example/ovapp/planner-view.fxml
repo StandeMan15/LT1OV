@@ -50,7 +50,7 @@
         </Label>
         <Label fx:id="time" layoutX="773.0" layoutY="79.0" prefHeight="76.0" prefWidth="119.0" text="10:30" textFill="#fc0000">
             <font>
-                <Font size="48.0" />
+                <Font size="20.0" />
             </font></Label>
         <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="70.0" layoutY="287.0" prefHeight="305.0" prefWidth="502.0" style="-fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;" textFill="#fc0000" wrapText="true">
             <opaqueInsets>

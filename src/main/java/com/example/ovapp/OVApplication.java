@@ -26,6 +26,8 @@ public class OVApplication extends Application {
 
         primaryStage.setTitle("OV Application");
 
+        primaryStage.setResizable(false);
+
         primaryStage.setScene(scene);
 
         primaryStage.show();

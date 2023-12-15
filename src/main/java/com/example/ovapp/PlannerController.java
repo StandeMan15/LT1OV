@@ -115,10 +115,9 @@ public class PlannerController {
         int selectedVehicleIndex = vehicleSelectionComboBox.getSelectionModel().getSelectedIndex();
         System.out.println(selectedVehicleIndex);
 
-// Translate the items in the vehicles list
+        // Translate the items in the vehicles list
         ObservableList<String> translatedVehicles = translateList(vehicles);
         vehicleSelectionComboBox.setItems(translatedVehicles);
-
 
         if (selectedVehicleIndex != -1) {
             // Set the original selected item before translation

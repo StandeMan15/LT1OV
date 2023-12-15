@@ -131,7 +131,6 @@ public class PlannerController {
         arrivalComboBox.setValue(stations.get(1));
         vehicleSelectionComboBox.setValue(vehicles.get(0));
 
-
         departureComboBox.setVisibleRowCount(4);
         arrivalComboBox.setVisibleRowCount(4);
         vehicleSelectionComboBox.setVisibleRowCount(3);
@@ -212,7 +211,7 @@ public class PlannerController {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             while(!stop){
                 try{
-                    Thread.sleep(1000);
+                    Thread.sleep(1);
                 }catch(Exception e){
                     System.out.println(e);
                 }

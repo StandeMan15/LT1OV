@@ -102,6 +102,8 @@ public class PlannerController {
         updateUI();
     }
 
+
+
     private void updateUI() {
         searchButton.setText(Translator.translate("button_searchroute"));
         departLabel.setText(Translator.translate("depart_label"));
@@ -109,13 +111,30 @@ public class PlannerController {
         timeDateLabel.setText(Translator.translate("time_date_label"));
         transportLabel.setText(Translator.translate("transport_label"));
 
+        // Get the currently selected item index
+        int selectedVehicleIndex = vehicleSelectionComboBox.getSelectionModel().getSelectedIndex();
+        System.out.println(selectedVehicleIndex);
+
+// Translate the items in the vehicles list
+        ObservableList<String> translatedVehicles = translateList(vehicles);
+        vehicleSelectionComboBox.setItems(translatedVehicles);
+
+
+        if (selectedVehicleIndex != -1) {
+            // Set the original selected item before translation
+            vehicleSelectionComboBox.getSelectionModel().select(selectedVehicleIndex);
+        }
+
         if (!routeOutText.getText().isEmpty()) SearchRoute();
 
         datePicker.setConverter(createDateConverter());
         datePicker.setValue(datePicker.getValue());
-
-        vehicleSelectionComboBox.setItems(translateList(vehicles));
     }
+
+
+
+
+
 
     private void initializeLanguageButtons(){
         languageNLButton.setOnAction(event -> changeLanguage("nl"));

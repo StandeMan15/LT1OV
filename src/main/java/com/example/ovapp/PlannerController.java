@@ -230,9 +230,9 @@ public class PlannerController {
     @FXML
     private void showKeyboardInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Gebruik van toetsenbord");
+        alert.setTitle(translator.translate("keyboard_alert_title"));
         alert.setHeaderText(null);
-        alert.setContentText("Bij het selecteren van vertrek, aankomst, vervoer en datum kan ook het toetsenbord worden gebruikt.");
+        alert.setContentText(translator.translate("keyboard_alert_content"));
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.initModality(Modality.APPLICATION_MODAL);

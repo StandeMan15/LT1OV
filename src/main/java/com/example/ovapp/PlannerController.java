@@ -102,8 +102,6 @@ public class PlannerController {
         updateUI();
     }
 
-
-
     private void updateUI() {
         searchButton.setText(Translator.translate("button_searchroute"));
         departLabel.setText(Translator.translate("depart_label"));

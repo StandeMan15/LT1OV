@@ -1,7 +1,9 @@
 package com.example.ovapp;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -21,20 +23,25 @@ public class OVApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(OVApplication.class.getResource("planner-view.fxml"));
+        Parent root = fxmlLoader.load();
 
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+        Scene scene = new Scene(root, 1000, 800);
 
         primaryStage.setTitle("OV Application");
-
         primaryStage.setResizable(false);
-
         primaryStage.setScene(scene);
 
-        primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.out.print("Closing Application...");
+            System.exit(0);
+        });
 
+        primaryStage.show();
     }
 
-     /**
+
+    /**
      * Main method to launch the application.
      *
      * @param args Command-line arguments.

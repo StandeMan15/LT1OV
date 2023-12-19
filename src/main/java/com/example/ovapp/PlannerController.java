@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +20,7 @@ import java.util.Locale;
 
 
 public class PlannerController {
+    Translator translator = new Translator();
 
     ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
     ObservableList<String> vehicles = FXCollections.observableArrayList("bus", "train");
@@ -54,8 +55,6 @@ public class PlannerController {
     private Spinner<Integer> hourSpinner;
     @FXML
     private Spinner<Integer> minuteSpinner;
-    @FXML
-    private volatile boolean stop = false;
 
     @FXML
     protected void SearchRoute() {
@@ -67,26 +66,20 @@ public class PlannerController {
         Integer minuteTime = minuteSpinner.getValue();
 
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Translator.translate("date_format"));
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
 
-            routeOutText.setText(String.format(Translator.translate("route_message"),
+            routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
                     String.format("%02d", hourTime), String.format("%02d", minuteTime)));
         } catch (NullPointerException e) {
-            routeOutText.setText(Translator.translate("empty_field"));
+            routeOutText.setText(translator.translate("empty_field"));
         }
-    }
-
-    @FXML
-    private void Close_clicked(MouseEvent event){
-        stop = true;
-        javafx.application.Platform.exit();
     }
 
     @FXML
     protected void initialize() {
         System.out.println("Controller initialized.");
-        Translator.setLanguage("nl");
+        translator.setLanguage("nl");
         Locale.setDefault(new Locale("nl"));
         initializeComboBoxes();
         initializeTimePicker();
@@ -97,28 +90,24 @@ public class PlannerController {
     }
 
     public void changeLanguage(String language) {
-        Translator.setLanguage(language);
+        translator.setLanguage(language);
         Locale.setDefault(new Locale(language));
         updateUI();
     }
 
     private void updateUI() {
-        searchButton.setText(Translator.translate("button_searchroute"));
-        departLabel.setText(Translator.translate("depart_label"));
-        arrivalLabel.setText(Translator.translate("arrival_label"));
-        timeDateLabel.setText(Translator.translate("time_date_label"));
-        transportLabel.setText(Translator.translate("transport_label"));
+        searchButton.setText(translator.translate("button_searchroute"));
+        departLabel.setText(translator.translate("depart_label"));
+        arrivalLabel.setText(translator.translate("arrival_label"));
+        timeDateLabel.setText(translator.translate("time_date_label"));
+        transportLabel.setText(translator.translate("transport_label"));
 
-        // Get the currently selected item index
         int selectedVehicleIndex = vehicleSelectionComboBox.getSelectionModel().getSelectedIndex();
-        System.out.println(selectedVehicleIndex);
 
-        // Translate the items in the vehicles list
         ObservableList<String> translatedVehicles = translateList(vehicles);
         vehicleSelectionComboBox.setItems(translatedVehicles);
 
         if (selectedVehicleIndex != -1) {
-            // Set the original selected item before translation
             vehicleSelectionComboBox.getSelectionModel().select(selectedVehicleIndex);
         }
 
@@ -127,11 +116,6 @@ public class PlannerController {
         datePicker.setConverter(createDateConverter());
         datePicker.setValue(datePicker.getValue());
     }
-
-
-
-
-
 
     private void initializeLanguageButtons(){
         languageNLButton.setOnAction(event -> changeLanguage("nl"));
@@ -158,7 +142,7 @@ public class PlannerController {
     private ObservableList<String> translateList(ObservableList<String> list) {
         ObservableList<String> translatedList = FXCollections.observableArrayList();
         for (String item : list) {
-            translatedList.add(Translator.translate(item));
+            translatedList.add(translator.translate(item));
         }
         return translatedList;
     }
@@ -206,7 +190,7 @@ public class PlannerController {
     }
 
     private StringConverter<LocalDate> createDateConverter() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Translator.translate("date_format"));
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
 
         return new StringConverter<>() {
             @Override
@@ -225,14 +209,18 @@ public class PlannerController {
     private void Timenow(){
         Thread thread = new Thread(() -> {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            while(!stop){
+            while(true){
                 try{
-                    Thread.sleep(1);
-                }catch(Exception e){
+                    final String timenow = sdf.format(new Date());
+                    Platform.runLater(() -> time.setText(timenow));
+
+                    Thread.sleep(60000); // 60.000 milliseconden = 1 minuut
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.out.println(e);
+                } catch (Exception e) {
                     System.out.println(e);
                 }
-                final String timenow = sdf.format(new Date());
-                Platform.runLater(() -> time.setText(timenow));
             }
         });
         thread.start();

@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.text.SimpleDateFormat;
@@ -214,7 +213,7 @@ public class PlannerController {
                     final String timenow = sdf.format(new Date());
                     Platform.runLater(() -> time.setText(timenow));
 
-                    Thread.sleep(60000); // 60.000 milliseconden = 1 minuut
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.out.println(e);

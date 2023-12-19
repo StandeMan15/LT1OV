@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -224,5 +225,18 @@ public class PlannerController {
             }
         });
         thread.start();
+    }
+
+    @FXML
+    private void showKeyboardInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Gebruik van toetsenbord");
+        alert.setHeaderText(null);
+        alert.setContentText("Bij het selecteren van vertrek, aankomst, vervoer en datum kan ook het toetsenbord worden gebruikt.");
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        alert.showAndWait();
     }
 }

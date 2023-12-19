@@ -26,7 +26,7 @@
     <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="1000.0" spacing="10.0" style="-fx-background-color: #FFAE00;">
         <ImageView fitHeight="148.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
             <HBox.margin>
-                <Insets right="520.0" />
+                <Insets right="420.0" />
             </HBox.margin>
             <Image url="@images/OVLogo.png" />
         </ImageView>
@@ -57,7 +57,7 @@
         </Button>
         <Button layoutX="500.0" layoutY="500.0" onAction="#showKeyboardInfo" text="?">
          <font>
-            <Font size="24.0" />
+            <Font size="30.0" />
          </font>
          <HBox.margin>
             <Insets right="10.0" />

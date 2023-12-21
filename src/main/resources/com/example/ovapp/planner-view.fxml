@@ -57,7 +57,7 @@
         </Button>
         <Button layoutX="500.0" layoutY="500.0" onAction="#showKeyboardInfo" text="?">
          <font>
-            <Font size="30.0" />
+            <Font name="System Bold" size="30.0" />
          </font>
          <HBox.margin>
             <Insets right="10.0" />

@@ -65,16 +65,21 @@ public class PlannerController {
         LocalDate selectedDate = datePicker.getValue();
         Integer hourTime = hourSpinner.getValue();
         Integer minuteTime = minuteSpinner.getValue();
+        LocalTime travelTime = LocalTime.of(0, 0);
+        Integer travelDistance = 0;
 
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
 
             routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
-                    String.format("%02d", hourTime), String.format("%02d", minuteTime)));
+                    String.format("%02d", hourTime), String.format("%02d", minuteTime), travelTime, travelDistance));
         } catch (NullPointerException e) {
             routeOutText.setText(translator.translate("empty_field"));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
+
     }
 
     @FXML

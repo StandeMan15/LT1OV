@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.text.SimpleDateFormat;
@@ -223,5 +225,18 @@ public class PlannerController {
             }
         });
         thread.start();
+    }
+
+    @FXML
+    private void showKeyboardInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(translator.translate("keyboard_alert_title"));
+        alert.setHeaderText(null);
+        alert.setContentText(translator.translate("keyboard_alert_content"));
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        alert.showAndWait();
     }
 }

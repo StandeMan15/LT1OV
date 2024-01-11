@@ -239,7 +239,6 @@ public class PlannerController {
         alert.setTitle(translator.translate("keyboard_alert_title"));
         alert.setHeaderText(null);
 
-
         Label contentLabel = new Label(translator.translate("keyboard_alert_content"));
         contentLabel.setStyle("-fx-font-size: 21px;");
         alert.getDialogPane().setContent(contentLabel);

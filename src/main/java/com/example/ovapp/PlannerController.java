@@ -17,17 +17,20 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 public class PlannerController {
     Translator translator = new Translator();
-
+    RouteInfo routeInfo = new RouteInfo(0,LocalTime.of(0, 0));
+    private final StationManager stationManager = new StationManager();
     private final Map<String, List<StationInfo>> stationRoutes = new HashMap<>();
-    private List<String> allstations;
 
-    //ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
     ObservableList<String> vehicles = FXCollections.observableArrayList("bus", "train");
 
     @FXML
@@ -69,8 +72,10 @@ public class PlannerController {
         LocalDate selectedDate = datePicker.getValue();
         Integer hourTime = hourSpinner.getValue();
         Integer minuteTime = minuteSpinner.getValue();
-        LocalTime travelTime = LocalTime.of(0, 0);
-        Integer travelDistance = 0;
+
+        calculateRouteInfo(Departure,Arrival);
+        LocalTime travelTime = routeInfo.getTotalTravelTime();
+        Integer travelDistance = routeInfo.getTotalDistance();
 
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
@@ -83,7 +88,6 @@ public class PlannerController {
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-
     }
 
     @FXML
@@ -93,15 +97,13 @@ public class PlannerController {
         Locale.setDefault(new Locale("nl"));
 
         initializeStationRoutes();
-        initializeAllStations();
+        initializeBusStations();
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
         initializeLanguageButtons();
         Timenow();
         updateUI();
-
-
     }
 
     public void changeLanguage(String language) {
@@ -134,58 +136,71 @@ public class PlannerController {
 
     private void initializeStationRoutes() {
         List<StationInfo> intercityLine1 = Arrays.asList(
-                new StationInfo("Den Haag Centraal", 0, 0),
-                new StationInfo("Gouda", 25, 30),
-                new StationInfo("Utrecht Centraal", 40, 50),
-                new StationInfo("Amersfoort Centraal", 60, 80),
-                new StationInfo("Apeldoorn", 90, 120),
-                new StationInfo("Deventer", 120, 150),
-                new StationInfo("Almelo", 140, 180),
-                new StationInfo("Hengelo", 160, 210),
-                new StationInfo("Enschede", 180, 240)
+                new StationInfo("Den Haag Centraal", 0, LocalTime.of(0, 0),""),
+                new StationInfo("Gouda", 29, LocalTime.of(0, 18),""),
+                new StationInfo("Utrecht Centraal", 36, LocalTime.of(0, 18),""),
+                new StationInfo("Amersfoort Centraal", 24, LocalTime.of(0, 13),""),
+                new StationInfo("Apeldoorn", 45, LocalTime.of(0, 24),""),
+                new StationInfo("Deventer", 16, LocalTime.of(0, 10),""),
+                new StationInfo("Almelo", 40, LocalTime.of(0, 23),""),
+                new StationInfo("Hengelo", 16, LocalTime.of(0, 11),""),
+                new StationInfo("Enschede", 9, LocalTime.of(0, 7),"")
         );
 
         List<StationInfo> intercityLine2 = Arrays.asList(
-                new StationInfo("Maastricht", 0, 0),
-                new StationInfo("Sittard", 25, 30),
-                new StationInfo("Roermond", 50, 60),
-                new StationInfo("Weert", 75, 90),
-                new StationInfo("Eindhoven Centraal", 100, 120),
-                new StationInfo("'S-Hertogenbosch", 120, 150),
-                new StationInfo("Utrecht Centraal", 140, 180),
-                new StationInfo("Amsterdam Bijlmer Arena", 160, 210),
-                new StationInfo("Amsterdam Amstel", 180, 240),
-                new StationInfo("Amsterdam Centraal", 200, 270)
+                new StationInfo("Maastricht", 0, LocalTime.of(0, 0),""),
+                new StationInfo("Sittard", 24, LocalTime.of(0, 15),""),
+                new StationInfo("Roermond", 26, LocalTime.of(0, 14),""),
+                new StationInfo("Weert", 25, LocalTime.of(0, 14),""),
+                new StationInfo("Eindhoven Centraal", 30, LocalTime.of(0, 16),""),
+                new StationInfo("'S-Hertogenbosch", 33, LocalTime.of(0, 19),""),
+                new StationInfo("Utrecht Centraal", 51, LocalTime.of(0, 29),""),
+                new StationInfo("Amsterdam Amstel", 35, LocalTime.of(0, 18),""),
+                new StationInfo("Amsterdam Centraal", 6, LocalTime.of(0, 8),"")
         );
+        List<StationInfo> busLine1 = Arrays.asList(
+                new StationInfo("Rotterdam", 0, LocalTime.of(0, 0),""),
+                new StationInfo("Delft", 15, LocalTime.of(0, 12),""),
+                new StationInfo("The Hague", 18, LocalTime.of(0, 15),""),
+                new StationInfo("Leiden", 22, LocalTime.of(0, 18),"")
+        );
+
+        List<StationInfo> busLine2 = Arrays.asList(
+                new StationInfo("Utrecht", 0, LocalTime.of(0, 0),""),
+                new StationInfo("Zeist", 12, LocalTime.of(0, 10),""),
+                new StationInfo("Amersfoort", 25, LocalTime.of(0, 20),""),
+                new StationInfo("Hilversum", 30, LocalTime.of(0, 25),"")
+        );
+
         stationRoutes.put("Intercity Line 1", intercityLine1);
         stationRoutes.put("Intercity Line 2", intercityLine2);
+        stationRoutes.put("Bus Line 1", busLine1);
+        stationRoutes.put("Bus Line 2", busLine2);
     }
 
-    private RouteInfo calculateRouteInfo(String departure, String arrival, String line) {
-        List<StationInfo> stations = stationRoutes.get(line);
-
-        if (stations != null) {
-            double totalDistance = 0;
-            int totalTravelTime = 0;
+    private void calculateRouteInfo(String departure, String arrival) {
+        for (List<StationInfo> stations : stationRoutes.values()) {
+            int totalDistance = 0;
+            LocalTime totalTravelTime = LocalTime.of(0, 0);
 
             boolean foundDeparture = false;
 
             for (StationInfo station : stations) {
                 if (foundDeparture) {
                     totalDistance += station.getDistance();
-                    totalTravelTime += station.getTravelTime();
+                    totalTravelTime = totalTravelTime.plusHours(station.getTravelTime().getHour())
+                            .plusMinutes(station.getTravelTime().getMinute());
                     if (station.getName().equals(arrival)) {
-                        break;
+                        // Update RouteInfo directly
+                        routeInfo.setTotalDistance(totalDistance);
+                        routeInfo.setTotalTravelTime(totalTravelTime);
+                        return;  // Onderbreek de loop wanneer het aankomststation is bereikt
                     }
                 } else if (station.getName().equals(departure)) {
                     foundDeparture = true;
                 }
             }
-
-            return new RouteInfo(totalDistance, totalTravelTime);
         }
-
-        return null;
     }
 
     private void initializeLanguageButtons(){
@@ -193,51 +208,47 @@ public class PlannerController {
         languageENButton.setOnAction(event -> changeLanguage("en"));
     }
 
-    private void initializeAllStations() {
-        List<String> intercityLine1Stations = getStationsForLine("Intercity Line 1");
-        List<String> intercityLine2Stations = getStationsForLine("Intercity Line 2");
-
-        // Combine stations of both lines
-        allstations = Stream.concat(intercityLine1Stations.stream(), intercityLine2Stations.stream())
-                .distinct()
-                .collect(Collectors.toList());
-
-        System.out.println("Intercity Line 1 Stations: " + intercityLine1Stations);
-        System.out.println("Intercity Line 2 Stations: " + intercityLine2Stations);
-        System.out.println("All Stations: " + allstations);
-    }
-
     private void initializeComboBoxes() {
 
-        departureComboBox.setItems(FXCollections.observableArrayList(allstations));
-        arrivalComboBox.setItems(FXCollections.observableArrayList(allstations));
-
-
-
-        // Set a default selection (optional)
-        departureComboBox.setValue(allstations.get(0));
-        arrivalComboBox.setValue(allstations.get(1));
+        vehicleSelectionComboBox.setItems(vehicles);
         vehicleSelectionComboBox.setValue(vehicles.get(0));
 
         departureComboBox.setVisibleRowCount(4);
         arrivalComboBox.setVisibleRowCount(4);
         vehicleSelectionComboBox.setVisibleRowCount(3);
 
-        // Add an event listener to departureComboBox to filter arrival options
-        departureComboBox.setOnAction(event -> updateArrivalOptions());
+        //departureComboBox.setOnAction(event -> updateArrivalOptions());
+
+        vehicleSelectionComboBox.setOnAction(event -> {
+            int selectedVehicleIndex = vehicleSelectionComboBox.getSelectionModel().getSelectedIndex();
+
+            if (selectedVehicleIndex == 0) {  // Index 0 is "bus"
+                initializeBusStations();
+            } else if (selectedVehicleIndex == 1) {  // Index 1 is "train"
+                initializeTrainStations();
+            }
+        });
     }
 
-    private List<String> getStationsForLine(String line) {
-        List<String> stations = new ArrayList<>();
-        List<StationInfo> stationInfoList = stationRoutes.get(line);
+    private void initializeBusStations() {
+        List<String> busStations = stationManager.getBusStations();
 
-        System.out.println(stationInfoList);
+        departureComboBox.setItems(FXCollections.observableArrayList(busStations));
+        arrivalComboBox.setItems(FXCollections.observableArrayList(busStations));
 
-        if (stationInfoList != null) {
-            stations = stationInfoList.stream().map(StationInfo::getName).collect(Collectors.toList());
-        }
+        // Set default values
+        departureComboBox.setValue(busStations.get(0));
+        arrivalComboBox.setValue(busStations.get(1));
+    }
 
-        return stations;
+    private void initializeTrainStations() {
+        List<String> trainStations = stationManager.getTrainStations();
+
+        departureComboBox.setItems(FXCollections.observableArrayList(trainStations));
+        arrivalComboBox.setItems(FXCollections.observableArrayList(trainStations));
+
+        departureComboBox.setValue(trainStations.get(0));
+        arrivalComboBox.setValue(trainStations.get(1));
     }
 
     private ObservableList<String> translateList(ObservableList<String> list) {
@@ -248,16 +259,16 @@ public class PlannerController {
         return translatedList;
     }
 
-    private void updateArrivalOptions() {
-        String selectedOption = departureComboBox.getValue();
-
-        FilteredList<String> filteredArrivalOptions = new FilteredList<>(FXCollections.observableArrayList(allstations));
-
-        filteredArrivalOptions.setPredicate(option -> !option.equals(selectedOption));
-        arrivalComboBox.setItems(filteredArrivalOptions);
-
-        arrivalComboBox.setValue(filteredArrivalOptions.isEmpty() ? null : filteredArrivalOptions.get(0));
-    }
+//    private void updateArrivalOptions() {
+//        String selectedOption = departureComboBox.getValue();
+//
+//        FilteredList<String> filteredArrivalOptions = new FilteredList<>(FXCollections.observableArrayList(trainStations));
+//
+//        filteredArrivalOptions.setPredicate(option -> !option.equals(selectedOption));
+//        arrivalComboBox.setItems(filteredArrivalOptions);
+//
+//        arrivalComboBox.setValue(filteredArrivalOptions.isEmpty() ? null : filteredArrivalOptions.get(0));
+//    }
 
     private void initializeTimePicker() {
         LocalTime currentTime = LocalTime.now();

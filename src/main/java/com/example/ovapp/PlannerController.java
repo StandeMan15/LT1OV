@@ -16,14 +16,18 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class PlannerController {
     Translator translator = new Translator();
 
-    ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
+    private final Map<String, List<StationInfo>> stationRoutes = new HashMap<>();
+    private List<String> allstations;
+
+    //ObservableList<String> stations = FXCollections.observableArrayList("Amsterdam", "Amersfoort", "Breda", "Enschede", "Schiphol", "Utrecht", "Zwolle");
     ObservableList<String> vehicles = FXCollections.observableArrayList("bus", "train");
 
     @FXML
@@ -87,12 +91,17 @@ public class PlannerController {
         System.out.println("Controller initialized.");
         translator.setLanguage("nl");
         Locale.setDefault(new Locale("nl"));
+
+        initializeStationRoutes();
+        initializeAllStations();
         initializeComboBoxes();
         initializeTimePicker();
         initializeDatePicker();
         initializeLanguageButtons();
         Timenow();
         updateUI();
+
+
     }
 
     public void changeLanguage(String language) {
@@ -123,18 +132,91 @@ public class PlannerController {
         datePicker.setValue(datePicker.getValue());
     }
 
+    private void initializeStationRoutes() {
+        List<StationInfo> intercityLine1 = Arrays.asList(
+                new StationInfo("Den Haag Centraal", 0, 0),
+                new StationInfo("Gouda", 25, 30),
+                new StationInfo("Utrecht Centraal", 40, 50),
+                new StationInfo("Amersfoort Centraal", 60, 80),
+                new StationInfo("Apeldoorn", 90, 120),
+                new StationInfo("Deventer", 120, 150),
+                new StationInfo("Almelo", 140, 180),
+                new StationInfo("Hengelo", 160, 210),
+                new StationInfo("Enschede", 180, 240)
+        );
+
+        List<StationInfo> intercityLine2 = Arrays.asList(
+                new StationInfo("Maastricht", 0, 0),
+                new StationInfo("Sittard", 25, 30),
+                new StationInfo("Roermond", 50, 60),
+                new StationInfo("Weert", 75, 90),
+                new StationInfo("Eindhoven Centraal", 100, 120),
+                new StationInfo("'S-Hertogenbosch", 120, 150),
+                new StationInfo("Utrecht Centraal", 140, 180),
+                new StationInfo("Amsterdam Bijlmer Arena", 160, 210),
+                new StationInfo("Amsterdam Amstel", 180, 240),
+                new StationInfo("Amsterdam Centraal", 200, 270)
+        );
+        stationRoutes.put("Intercity Line 1", intercityLine1);
+        stationRoutes.put("Intercity Line 2", intercityLine2);
+    }
+
+    private RouteInfo calculateRouteInfo(String departure, String arrival, String line) {
+        List<StationInfo> stations = stationRoutes.get(line);
+
+        if (stations != null) {
+            double totalDistance = 0;
+            int totalTravelTime = 0;
+
+            boolean foundDeparture = false;
+
+            for (StationInfo station : stations) {
+                if (foundDeparture) {
+                    totalDistance += station.getDistance();
+                    totalTravelTime += station.getTravelTime();
+                    if (station.getName().equals(arrival)) {
+                        break;
+                    }
+                } else if (station.getName().equals(departure)) {
+                    foundDeparture = true;
+                }
+            }
+
+            return new RouteInfo(totalDistance, totalTravelTime);
+        }
+
+        return null;
+    }
+
     private void initializeLanguageButtons(){
         languageNLButton.setOnAction(event -> changeLanguage("nl"));
         languageENButton.setOnAction(event -> changeLanguage("en"));
     }
 
+    private void initializeAllStations() {
+        List<String> intercityLine1Stations = getStationsForLine("Intercity Line 1");
+        List<String> intercityLine2Stations = getStationsForLine("Intercity Line 2");
+
+        // Combine stations of both lines
+        allstations = Stream.concat(intercityLine1Stations.stream(), intercityLine2Stations.stream())
+                .distinct()
+                .collect(Collectors.toList());
+
+        System.out.println("Intercity Line 1 Stations: " + intercityLine1Stations);
+        System.out.println("Intercity Line 2 Stations: " + intercityLine2Stations);
+        System.out.println("All Stations: " + allstations);
+    }
+
     private void initializeComboBoxes() {
-        departureComboBox.setItems(stations);
-        arrivalComboBox.setItems(stations);
+
+        departureComboBox.setItems(FXCollections.observableArrayList(allstations));
+        arrivalComboBox.setItems(FXCollections.observableArrayList(allstations));
+
+
 
         // Set a default selection (optional)
-        departureComboBox.setValue(stations.get(0));
-        arrivalComboBox.setValue(stations.get(1));
+        departureComboBox.setValue(allstations.get(0));
+        arrivalComboBox.setValue(allstations.get(1));
         vehicleSelectionComboBox.setValue(vehicles.get(0));
 
         departureComboBox.setVisibleRowCount(4);
@@ -143,6 +225,19 @@ public class PlannerController {
 
         // Add an event listener to departureComboBox to filter arrival options
         departureComboBox.setOnAction(event -> updateArrivalOptions());
+    }
+
+    private List<String> getStationsForLine(String line) {
+        List<String> stations = new ArrayList<>();
+        List<StationInfo> stationInfoList = stationRoutes.get(line);
+
+        System.out.println(stationInfoList);
+
+        if (stationInfoList != null) {
+            stations = stationInfoList.stream().map(StationInfo::getName).collect(Collectors.toList());
+        }
+
+        return stations;
     }
 
     private ObservableList<String> translateList(ObservableList<String> list) {
@@ -156,7 +251,7 @@ public class PlannerController {
     private void updateArrivalOptions() {
         String selectedOption = departureComboBox.getValue();
 
-        FilteredList<String> filteredArrivalOptions = new FilteredList<>(stations);
+        FilteredList<String> filteredArrivalOptions = new FilteredList<>(FXCollections.observableArrayList(allstations));
 
         filteredArrivalOptions.setPredicate(option -> !option.equals(selectedOption));
         arrivalComboBox.setItems(filteredArrivalOptions);

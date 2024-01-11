@@ -55,13 +55,19 @@
                 <Insets right="10.0" />
             </HBox.margin>
         </Button>
-        <Button layoutX="500.0" layoutY="500.0" onAction="#showKeyboardInfo" text="?">
+        <Button layoutX="500.0" layoutY="500.0" onAction="#showKeyboardInfo">
          <font>
-            <Font name="System Bold" size="30.0" />
+            <Font name="System Bold" />
          </font>
          <HBox.margin>
             <Insets right="10.0" />
          </HBox.margin>
+         <graphic>
+            <ImageView fitHeight="46.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/Keyboard.png" />
+               </image></ImageView>
+         </graphic>
         </Button>
     </HBox>
     <HBox alignment="TOP_RIGHT" layoutX="74.0" layoutY="105.0" prefHeight="190.0" prefWidth="590.0">

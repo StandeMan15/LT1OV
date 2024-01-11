@@ -1,14 +1,22 @@
 package com.example.ovapp;
 
-public class StationInfo {
-    private final String name;
-    private final int distance;
-    private final int travelTime;
+import java.time.LocalTime;
 
-    public StationInfo(String name, int distance, int travelTime) {
+public class StationInfo {
+    private String name;
+    private String line;
+    private int distance;
+    private LocalTime travelTime;
+
+    public StationInfo(String name, int distance, LocalTime travelTime, String line) {
         this.name = name;
         this.distance = distance;
         this.travelTime = travelTime;
+        this.line = line;
+    }
+
+    public String getLine() {
+        return line;
     }
 
     public String getName() {
@@ -19,7 +27,7 @@ public class StationInfo {
         return distance;
     }
 
-    public int getTravelTime() {
+    public LocalTime getTravelTime() {
         return travelTime;
     }
 }

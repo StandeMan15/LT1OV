@@ -1,19 +1,29 @@
 package com.example.ovapp;
 
-public class RouteInfo {
-    private final double totalDistance;
-    private final int totalTravelTime;
+import java.time.LocalTime;
 
-    public RouteInfo(double totalDistance, int totalTravelTime) {
+public class RouteInfo {
+    private int totalDistance;
+    private LocalTime totalTravelTime;
+
+    public RouteInfo(int totalDistance, LocalTime totalTravelTime) {
         this.totalDistance = totalDistance;
         this.totalTravelTime = totalTravelTime;
     }
 
-    public double getTotalDistance() {
+    public int getTotalDistance() {
         return totalDistance;
     }
 
-    public int getTotalTravelTime() {
+    public LocalTime getTotalTravelTime() {
         return totalTravelTime;
+    }
+
+    public void setTotalDistance(int distance) {
+        totalDistance = distance;
+    }
+
+    public void setTotalTravelTime(LocalTime travelTime) {
+         totalTravelTime = travelTime;
     }
 }

@@ -233,11 +233,16 @@ public class PlannerController {
     }
 
     @FXML
+
     private void showKeyboardInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(translator.translate("keyboard_alert_title"));
         alert.setHeaderText(null);
-        alert.setContentText(translator.translate("keyboard_alert_content"));
+
+
+        Label contentLabel = new Label(translator.translate("keyboard_alert_content"));
+        contentLabel.setStyle("-fx-font-size: 21px;");
+        alert.getDialogPane().setContent(contentLabel);
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.initModality(Modality.APPLICATION_MODAL);

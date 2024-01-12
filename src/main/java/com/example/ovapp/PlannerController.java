@@ -29,7 +29,7 @@ public class PlannerController {
     Translator translator = new Translator();
     RouteInfo routeInfo = new RouteInfo(0,LocalTime.of(0, 0));
     private final StationManager stationManager = new StationManager();
-    private final Map<String, List<StationInfo>> stationRoutes = new HashMap<>();
+    private final Map<String, List<StationInfo>> stationRoutes = stationManager.getStationRoutes();
 
     ObservableList<String> vehicles = FXCollections.observableArrayList("bus", "train");
 
@@ -96,7 +96,6 @@ public class PlannerController {
         translator.setLanguage("nl");
         Locale.setDefault(new Locale("nl"));
 
-        initializeStationRoutes();
         initializeBusStations();
         initializeComboBoxes();
         initializeTimePicker();
@@ -134,50 +133,6 @@ public class PlannerController {
         datePicker.setValue(datePicker.getValue());
     }
 
-    private void initializeStationRoutes() {
-        List<StationInfo> intercityLine1 = Arrays.asList(
-                new StationInfo("Den Haag Centraal", 0, LocalTime.of(0, 0),""),
-                new StationInfo("Gouda", 29, LocalTime.of(0, 18),""),
-                new StationInfo("Utrecht Centraal", 36, LocalTime.of(0, 18),""),
-                new StationInfo("Amersfoort Centraal", 24, LocalTime.of(0, 13),""),
-                new StationInfo("Apeldoorn", 45, LocalTime.of(0, 24),""),
-                new StationInfo("Deventer", 16, LocalTime.of(0, 10),""),
-                new StationInfo("Almelo", 40, LocalTime.of(0, 23),""),
-                new StationInfo("Hengelo", 16, LocalTime.of(0, 11),""),
-                new StationInfo("Enschede", 9, LocalTime.of(0, 7),"")
-        );
-
-        List<StationInfo> intercityLine2 = Arrays.asList(
-                new StationInfo("Maastricht", 0, LocalTime.of(0, 0),""),
-                new StationInfo("Sittard", 24, LocalTime.of(0, 15),""),
-                new StationInfo("Roermond", 26, LocalTime.of(0, 14),""),
-                new StationInfo("Weert", 25, LocalTime.of(0, 14),""),
-                new StationInfo("Eindhoven Centraal", 30, LocalTime.of(0, 16),""),
-                new StationInfo("'S-Hertogenbosch", 33, LocalTime.of(0, 19),""),
-                new StationInfo("Utrecht Centraal", 51, LocalTime.of(0, 29),""),
-                new StationInfo("Amsterdam Amstel", 35, LocalTime.of(0, 18),""),
-                new StationInfo("Amsterdam Centraal", 6, LocalTime.of(0, 8),"")
-        );
-        List<StationInfo> busLine1 = Arrays.asList(
-                new StationInfo("Rotterdam", 0, LocalTime.of(0, 0),""),
-                new StationInfo("Delft", 15, LocalTime.of(0, 12),""),
-                new StationInfo("The Hague", 18, LocalTime.of(0, 15),""),
-                new StationInfo("Leiden", 22, LocalTime.of(0, 18),"")
-        );
-
-        List<StationInfo> busLine2 = Arrays.asList(
-                new StationInfo("Utrecht", 0, LocalTime.of(0, 0),""),
-                new StationInfo("Zeist", 12, LocalTime.of(0, 10),""),
-                new StationInfo("Amersfoort", 25, LocalTime.of(0, 20),""),
-                new StationInfo("Hilversum", 30, LocalTime.of(0, 25),"")
-        );
-
-        stationRoutes.put("Intercity Line 1", intercityLine1);
-        stationRoutes.put("Intercity Line 2", intercityLine2);
-        stationRoutes.put("Bus Line 1", busLine1);
-        stationRoutes.put("Bus Line 2", busLine2);
-    }
-
     private void calculateRouteInfo(String departure, String arrival) {
         for (List<StationInfo> stations : stationRoutes.values()) {
             int totalDistance = 0;
@@ -191,7 +146,6 @@ public class PlannerController {
                     totalTravelTime = totalTravelTime.plusHours(station.getTravelTime().getHour())
                             .plusMinutes(station.getTravelTime().getMinute());
                     if (station.getName().equals(arrival)) {
-                        // Update RouteInfo directly
                         routeInfo.setTotalDistance(totalDistance);
                         routeInfo.setTotalTravelTime(totalTravelTime);
                         return;  // Onderbreek de loop wanneer het aankomststation is bereikt

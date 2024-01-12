@@ -40,7 +40,6 @@ public class OVApplication extends Application {
         primaryStage.show();
     }
 
-
     /**
      * Main method to launch the application.
      *

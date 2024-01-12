@@ -5,6 +5,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Manages station information, including routes, train stations, and bus stations.
+ */
 public class StationManager {
 
     private final Map<String, List<StationInfo>> stationRoutes = new HashMap<>();
@@ -17,6 +20,9 @@ public class StationManager {
         initializeTrainStations();
     }
 
+    /**
+     * Initializes station from all routes with hardcoded data.
+     */
     private void initializeStationRoutes() {
         List<StationInfo> intercityLine1 = Arrays.asList(
                 new StationInfo("Den Haag Centraal", 0, LocalTime.of(0, 0), ""),
@@ -61,6 +67,9 @@ public class StationManager {
         stationRoutes.put("Bus Line 2", busLine2);
     }
 
+    /**
+     * Initializes bus stations based on the available bus lines.
+     */
     private void initializeBusStations() {
         List<String> busLine1Stations = getStationsForLine("Bus Line 1");
         List<String> busLine2Stations = getStationsForLine("Bus Line 2");
@@ -70,6 +79,9 @@ public class StationManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Initializes train stations based on the available intercity lines.
+     */
     private void initializeTrainStations() {
         List<String> intercityLine1Stations = getStationsForLine("Intercity Line 1");
         List<String> intercityLine2Stations = getStationsForLine("Intercity Line 2");
@@ -79,6 +91,12 @@ public class StationManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves the list of stations for a given line.
+     *
+     * @param line The line for which stations need to be retrieved.
+     * @return List of stations for the specified line.
+     */
     public List<String> getStationsForLine(String line) {
         List<String> stations = new ArrayList<>();
         List<StationInfo> stationInfoList = stationRoutes.get(line);
@@ -102,4 +120,3 @@ public class StationManager {
         return stationRoutes;
     }
 }
-

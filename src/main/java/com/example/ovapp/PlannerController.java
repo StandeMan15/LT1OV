@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * Controller class for the OV Planner application.
+ * Handles user interactions and updates the UI.
+ */
 public class PlannerController {
     Translator translator = new Translator();
     RouteInfo routeInfo = new RouteInfo(0,LocalTime.of(0, 0));
@@ -64,6 +68,9 @@ public class PlannerController {
     @FXML
     private Spinner<Integer> minuteSpinner;
 
+    /**
+     * Searches for a route based on user inputs and displays the result.
+     */
     @FXML
     protected void SearchRoute() {
         String Departure = departureComboBox.getValue();
@@ -90,6 +97,9 @@ public class PlannerController {
         }
     }
 
+    /**
+     * Initializes the controller when the FXML file is loaded.
+     */
     @FXML
     protected void initialize() {
         System.out.println("Controller initialized.");
@@ -105,12 +115,20 @@ public class PlannerController {
         updateUI();
     }
 
+    /**
+     * Changes the language of the application.
+     *
+     * @param language The desired language code (e.g., "nl" or "en").
+     */
     public void changeLanguage(String language) {
         translator.setLanguage(language);
         Locale.setDefault(new Locale(language));
         updateUI();
     }
 
+    /**
+     * Updates the UI elements with translated text based on the current language.
+     */
     private void updateUI() {
         searchButton.setText(translator.translate("button_searchroute"));
         departLabel.setText(translator.translate("depart_label"));
@@ -133,6 +151,12 @@ public class PlannerController {
         datePicker.setValue(datePicker.getValue());
     }
 
+    /**
+     * Calculates route information based on the selected departure and arrival stations.
+     *
+     * @param departure The selected departure station.
+     * @param arrival   The selected arrival station.
+     */
     private void calculateRouteInfo(String departure, String arrival) {
         for (List<StationInfo> stations : stationRoutes.values()) {
             int totalDistance = 0;
@@ -157,11 +181,17 @@ public class PlannerController {
         }
     }
 
+    /**
+     * Initializes language change buttons.
+     */
     private void initializeLanguageButtons(){
         languageNLButton.setOnAction(event -> changeLanguage("nl"));
         languageENButton.setOnAction(event -> changeLanguage("en"));
     }
 
+    /**
+     * Initializes ComboBoxes for vehicle selection and station options.
+     */
     private void initializeComboBoxes() {
 
         vehicleSelectionComboBox.setItems(vehicles);
@@ -184,6 +214,9 @@ public class PlannerController {
         });
     }
 
+    /**
+     * Initializes ComboBoxes with bus stations.
+     */
     private void initializeBusStations() {
         List<String> busStations = stationManager.getBusStations();
 
@@ -195,6 +228,9 @@ public class PlannerController {
         arrivalComboBox.setValue(busStations.get(1));
     }
 
+    /**
+     * Initializes ComboBoxes with train stations.
+     */
     private void initializeTrainStations() {
         List<String> trainStations = stationManager.getTrainStations();
 
@@ -205,6 +241,12 @@ public class PlannerController {
         arrivalComboBox.setValue(trainStations.get(1));
     }
 
+    /**
+     * Translates the items in the given list.
+     *
+     * @param list The list to be translated.
+     * @return Translated list.
+     */
     private ObservableList<String> translateList(ObservableList<String> list) {
         ObservableList<String> translatedList = FXCollections.observableArrayList();
         for (String item : list) {
@@ -251,10 +293,18 @@ public class PlannerController {
         spinner.setValueFactory(valueFactory);
     }
 
+    /**
+     * Initializes the time picker with the current time.
+     */
     private void initializeDatePicker(){
         datePicker.setValue(LocalDate.now());
     }
 
+    /**
+     * Creates a StringConverter for the DatePicker to handle date formatting.
+     *
+     * @return A StringConverter for LocalDate.
+     */
     private StringConverter<LocalDate> createDateConverter() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
 
@@ -271,6 +321,9 @@ public class PlannerController {
         };
     }
 
+    /**
+     * Updates the time label in real-time.
+     */
     @FXML
     private void Timenow(){
         Thread thread = new Thread(() -> {
@@ -292,8 +345,10 @@ public class PlannerController {
         thread.start();
     }
 
+    /**
+     * Displays an informational alert about keyboard shortcuts.
+     */
     @FXML
-
     private void showKeyboardInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(translator.translate("keyboard_alert_title"));

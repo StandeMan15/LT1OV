@@ -17,14 +17,6 @@ public class StationManager {
         initializeTrainStations();
     }
 
-    public List<String> getTrainStations() {
-        return trainStations;
-    }
-
-    public List<String> getBusStations() {
-        return busStations;
-    }
-
     private void initializeStationRoutes() {
         List<StationInfo> intercityLine1 = Arrays.asList(
                 new StationInfo("Den Haag Centraal", 0, LocalTime.of(0, 0), ""),
@@ -96,6 +88,18 @@ public class StationManager {
         }
 
         return stations;
+    }
+
+    public List<String> getTrainStations() {
+        return trainStations;
+    }
+
+    public List<String> getBusStations() {
+        return busStations;
+    }
+
+    public Map<String, List<StationInfo>> getStationRoutes() {
+        return stationRoutes;
     }
 }
 

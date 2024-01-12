@@ -159,23 +159,47 @@ public class PlannerController {
      */
     private void calculateRouteInfo(String departure, String arrival) {
         for (List<StationInfo> stations : stationRoutes.values()) {
-            int totalDistance = 0;
-            LocalTime totalTravelTime = LocalTime.of(0, 0);
+            int totalDistanceTopToBottom = 0;
+            LocalTime totalTravelTimeTopToBottom = LocalTime.of(0, 0);
 
-            boolean foundDeparture = false;
+            int totalDistanceBottomToTop = 0;
+            LocalTime totalTravelTimeBottomToTop = LocalTime.of(0, 0);
 
+            boolean foundDepartureTopToBottom = false;
+            boolean foundDepartureBottomToTop = false;
+
+            // Top to Bottom
             for (StationInfo station : stations) {
-                if (foundDeparture) {
-                    totalDistance += station.getDistance();
-                    totalTravelTime = totalTravelTime.plusHours(station.getTravelTime().getHour())
+                if (foundDepartureTopToBottom) {
+                    totalDistanceTopToBottom += station.getDistance();
+                    totalTravelTimeTopToBottom = totalTravelTimeTopToBottom.plusHours(station.getTravelTime().getHour())
                             .plusMinutes(station.getTravelTime().getMinute());
                     if (station.getName().equals(arrival)) {
-                        routeInfo.setTotalDistance(totalDistance);
-                        routeInfo.setTotalTravelTime(totalTravelTime);
-                        return;  // Onderbreek de loop wanneer het aankomststation is bereikt
+                        routeInfo.setTotalDistance(totalDistanceTopToBottom);
+                        routeInfo.setTotalTravelTime(totalTravelTimeTopToBottom);
+                        return;
                     }
                 } else if (station.getName().equals(departure)) {
-                    foundDeparture = true;
+                    foundDepartureTopToBottom = true;
+                }
+            }
+
+            // Bottom to Top
+            ListIterator<StationInfo> iterator = stations.listIterator(stations.size());
+            while (iterator.hasPrevious()) {
+                StationInfo station = iterator.previous();
+
+                if (foundDepartureBottomToTop) {
+                    totalDistanceBottomToTop += station.getDistance();
+                    totalTravelTimeBottomToTop = totalTravelTimeBottomToTop.plusHours(station.getTravelTime().getHour())
+                            .plusMinutes(station.getTravelTime().getMinute());
+                    if (station.getName().equals(arrival)) {
+                        routeInfo.setTotalDistance(totalDistanceBottomToTop);
+                        routeInfo.setTotalTravelTime(totalTravelTimeBottomToTop);
+                        return;
+                    }
+                } else if (station.getName().equals(departure)) {
+                    foundDepartureBottomToTop = true;
                 }
             }
         }

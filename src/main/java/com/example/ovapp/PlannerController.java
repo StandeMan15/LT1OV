@@ -17,12 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -80,7 +75,16 @@ public class PlannerController {
         Integer hourTime = hourSpinner.getValue();
         Integer minuteTime = minuteSpinner.getValue();
 
-        calculateRouteInfo(Departure,Arrival);
+        // Maak een LocalTime object met de geselecteerde uren en minuten
+        LocalTime selectedTime = LocalTime.of(hourTime, minuteTime);
+
+        String selectedLine = stationManager.getLineForStation(Departure);
+        // Nieuwe toevoeging: haal beschikbare stations en eerstvolgende vertrektijd op
+        NextDepartureInfo nextDepartureInfo = stationManager.getNextDepartureInfo(selectedTime, selectedLine);
+
+        LocalTime nextDepartureTime = nextDepartureInfo.getNextDepartureTime();
+
+        calculateRouteInfo(Departure, Arrival);
         LocalTime travelTime = routeInfo.getTotalTravelTime();
         Integer travelDistance = routeInfo.getTotalDistance();
 
@@ -89,7 +93,8 @@ public class PlannerController {
 
             routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
-                    String.format("%02d", hourTime), String.format("%02d", minuteTime), travelTime, travelDistance));
+                    nextDepartureTime,
+                    travelTime, travelDistance));
         } catch (NullPointerException e) {
             routeOutText.setText(translator.translate("empty_field"));
         } catch (Exception e){

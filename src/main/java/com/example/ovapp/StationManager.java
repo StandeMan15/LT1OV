@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 public class StationManager {
 
     private final Map<String, List<StationInfo>> stationRoutes = new HashMap<>();
+    private final Map<String, List<LocalTime>> lineDepartureTimes = new HashMap<>();
     private List<String> trainStations;
     private List<String> busStations;
 
@@ -18,6 +19,7 @@ public class StationManager {
         initializeStationRoutes();
         initializeBusStations();
         initializeTrainStations();
+        initializeLineDepartureTimes();
     }
 
     /**
@@ -71,41 +73,76 @@ public class StationManager {
      * Initializes bus stations based on the available bus lines.
      */
     private void initializeBusStations() {
-        List<String> busLine1Stations = getStationsForLine("Bus Line 1");
-        List<String> busLine2Stations = getStationsForLine("Bus Line 2");
-
-        busStations = Stream.concat(busLine1Stations.stream(), busLine2Stations.stream())
-                .distinct()
-                .collect(Collectors.toList());
+        busStations = getStationsForLine("Bus Line 1");
+        busStations.addAll(getStationsForLine("Bus Line 2"));
     }
 
-    /**
-     * Initializes train stations based on the available intercity lines.
-     */
     private void initializeTrainStations() {
-        List<String> intercityLine1Stations = getStationsForLine("Intercity Line 1");
-        List<String> intercityLine2Stations = getStationsForLine("Intercity Line 2");
+        trainStations = getStationsForLine("Intercity Line 1");
+        trainStations.addAll(getStationsForLine("Intercity Line 2"));
+    }
 
-        trainStations = Stream.concat(intercityLine1Stations.stream(), intercityLine2Stations.stream())
-                .distinct()
+    private List<String> getStationsForLine(String line) {
+        return stationRoutes.getOrDefault(line, Collections.emptyList())
+                .stream()
+                .map(StationInfo::getName)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Retrieves the list of stations for a given line.
-     *
-     * @param line The line for which stations need to be retrieved.
-     * @return List of stations for the specified line.
-     */
-    public List<String> getStationsForLine(String line) {
-        List<String> stations = new ArrayList<>();
-        List<StationInfo> stationInfoList = stationRoutes.get(line);
+    private void initializeLineDepartureTimes() {
+        lineDepartureTimes.put("Intercity Line 1", Arrays.asList(LocalTime.of(11, 0), LocalTime.of(14, 0), LocalTime.of(20, 0)));
+        lineDepartureTimes.put("Intercity Line 2", Arrays.asList(LocalTime.of(10, 30), LocalTime.of(15, 30), LocalTime.of(21, 30)));
+        lineDepartureTimes.put("Bus Line 1", Arrays.asList(LocalTime.of(8, 0), LocalTime.of(12, 0), LocalTime.of(16, 0)));
+        lineDepartureTimes.put("Bus Line 2", Arrays.asList(LocalTime.of(9, 30), LocalTime.of(13, 30), LocalTime.of(17, 30)));
+    }
 
-        if (stationInfoList != null) {
-            stations = stationInfoList.stream().map(StationInfo::getName).collect(Collectors.toList());
+    private boolean isLineAvailable(String line, LocalTime currentTime) {
+        LocalTime nextDepartureTime = getNextDepartureTime(line, currentTime);
+
+        return nextDepartureTime != null;
+    }
+
+    NextDepartureInfo getNextDepartureInfo(LocalTime currentTime, String selectedLine) {
+        String availableLine = null;
+        LocalTime nextDepartureTime = null;
+
+        if (isLineAvailable(selectedLine, currentTime)) {
+            // Bepaal de eerstvolgende vertrektijd voor de geselecteerde lijn
+            nextDepartureTime = getNextDepartureTime(selectedLine, currentTime);
+
+            if (nextDepartureTime != null) {
+                availableLine = selectedLine;
+            }
         }
 
-        return stations;
+        return new NextDepartureInfo(availableLine, nextDepartureTime);
+    }
+
+    private LocalTime getNextDepartureTime(String line, LocalTime SelectTime) {
+        List<LocalTime> departureTimes = lineDepartureTimes.getOrDefault(line, Collections.emptyList());
+
+        // Zoek de eerstvolgende vertrektijd na het huidige tijdstip
+        for (LocalTime departureTime : departureTimes) {
+            if (SelectTime.isBefore(departureTime)) {
+                return departureTime;
+            }
+        }
+
+        // Als er geen vertrektijd na het huidige tijdstip is, neem dan de eerste vertrektijd van morgen
+        return departureTimes.isEmpty() ? null : departureTimes.get(0);
+    }
+
+    String getLineForStation(String departureStation) {
+        for (Map.Entry<String, List<StationInfo>> entry : stationRoutes.entrySet()) {
+            List<String> stationNames = entry.getValue().stream()
+                    .map(StationInfo::getName)
+                    .collect(Collectors.toList());
+
+            if (stationNames.contains(departureStation)) {
+                return entry.getKey();
+            }
+        }
+        return null; // Geen overeenkomende lijn gevonden
     }
 
     public List<String> getTrainStations() {

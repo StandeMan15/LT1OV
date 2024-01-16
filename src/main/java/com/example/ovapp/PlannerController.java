@@ -3,20 +3,21 @@ package com.example.ovapp;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-//import static jdk.internal.org.jline.utils.Colors.s;
+import java.util.stream.Collectors;
 
 
 /**
@@ -76,20 +77,36 @@ public class PlannerController {
         Integer hourTime = hourSpinner.getValue();
         Integer minuteTime = minuteSpinner.getValue();
 
-        calculateRouteInfo(Departure,Arrival);
+        LocalTime selectedTime = LocalTime.of(hourTime, minuteTime);
+        LocalTime DepartureTime= null;
+
+        String selectedLine = stationManager.getLineForStation(Departure);
+
+
+        List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime);
+        for (DepartureInfo departureInfo : departureInfos) {
+            System.out.println("Station: " + departureInfo.getStation());
+            System.out.println("Vertrektijd: " + departureInfo.getDepartureTime());
+        }
+
+        for (DepartureInfo departureInfo : departureInfos) {
+            if (departureInfo.getStation().equals(Departure)) {
+                DepartureTime = departureInfo.getDepartureTime();
+                break;
+            }
+        }
+
+        calculateRouteInfo(Departure, Arrival);
         LocalTime travelTime = routeInfo.getTotalTravelTime();
         Integer travelDistance = routeInfo.getTotalDistance();
-
 
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
 
-//            routeOutText1.setText(String.format("Stops along the route: %s", " stops" ));
-
-
             routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
-                    String.format("%02d", hourTime), String.format("%02d", minuteTime), travelTime, travelDistance));
+                    DepartureTime,
+                    travelTime, travelDistance));
         } catch (NullPointerException e) {
             routeOutText.setText(translator.translate("empty_field"));
         } catch (Exception e){

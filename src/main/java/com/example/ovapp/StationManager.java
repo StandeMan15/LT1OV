@@ -51,16 +51,16 @@ public class StationManager {
         );
         List<StationInfo> busLine1 = Arrays.asList(
                 new StationInfo("Eemsplein", 0, LocalTime.of(0, 0), ""),
-                new StationInfo("Stadhuis", 15, LocalTime.of(0, 12), ""),
+                new StationInfo("Stadhuis", 5, LocalTime.of(0, 12), ""),
                 new StationInfo("Centrum", 18, LocalTime.of(0, 15), ""),
-                new StationInfo("", 22, LocalTime.of(0, 18), "")
+                new StationInfo("t'Kip", 22, LocalTime.of(0, 18), "")
         );
 
         List<StationInfo> busLine2 = Arrays.asList(
-                new StationInfo("Utrecht", 0, LocalTime.of(0, 0), ""),
-                new StationInfo("Zeist", 12, LocalTime.of(0, 10), ""),
-                new StationInfo("Amersfoort", 25, LocalTime.of(0, 20), ""),
-                new StationInfo("Hilversum", 30, LocalTime.of(0, 25), "")
+                new StationInfo("Politie bureau", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Wolweg", 3, LocalTime.of(0, 4), ""),
+                new StationInfo("Prinselaan", 10, LocalTime.of(0, 14), ""),
+                new StationInfo("Markt", 5, LocalTime.of(0, 7), "")
         );
 
         stationRoutes.put("Intercity Line 1", intercityLine1);

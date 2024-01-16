@@ -75,14 +75,17 @@ public class PlannerController {
         Integer hourTime = hourSpinner.getValue();
         Integer minuteTime = minuteSpinner.getValue();
 
-        // Maak een LocalTime object met de geselecteerde uren en minuten
         LocalTime selectedTime = LocalTime.of(hourTime, minuteTime);
 
         String selectedLine = stationManager.getLineForStation(Departure);
-        // Nieuwe toevoeging: haal beschikbare stations en eerstvolgende vertrektijd op
         NextDepartureInfo nextDepartureInfo = stationManager.getNextDepartureInfo(selectedTime, selectedLine);
-
         LocalTime nextDepartureTime = nextDepartureInfo.getNextDepartureTime();
+
+        List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime);
+        for (DepartureInfo departureInfo : departureInfos) {
+            System.out.println("Station: " + departureInfo.getStation());
+            System.out.println("Vertrektijd: " + departureInfo.getDepartureTime());
+        }
 
         calculateRouteInfo(Departure, Arrival);
         LocalTime travelTime = routeInfo.getTotalTravelTime();
@@ -162,7 +165,7 @@ public class PlannerController {
      * @param departure The selected departure station.
      * @param arrival   The selected arrival station.
      */
-    private void calculateRouteInfo(String departure, String arrival) {
+    void calculateRouteInfo(String departure, String arrival) {
         for (List<StationInfo> stations : stationRoutes.values()) {
             int totalDistance = 0;
             LocalTime totalTravelTime = LocalTime.of(0, 0);
@@ -185,6 +188,7 @@ public class PlannerController {
             }
         }
     }
+
 
     /**
      * Initializes language change buttons.

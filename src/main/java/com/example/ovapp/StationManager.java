@@ -69,6 +69,43 @@ public class StationManager {
         stationRoutes.put("Bus Line 2", busLine2);
     }
 
+
+    public List<DepartureInfo> getDepartureTimesForStation(String departureStation, String line, LocalTime selectedTime) {
+        List<StationInfo> stations = stationRoutes.get(line);
+        List<DepartureInfo> departureInfos = new ArrayList<>();
+        boolean foundDeparture = false;
+
+        LocalTime currentTime = getNextDepartureTime(line, selectedTime); // Use the next departure time
+
+        for (StationInfo station : stations) {
+            if (foundDeparture) {
+                // Calculate the travel time from the previous station to the current station
+                LocalTime travelTime = station.getTravelTime();
+
+                // Calculate the departure time for the current station
+                LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
+
+                departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
+
+                currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
+
+                if (station.getName().equals(departureStation)) {
+                    break;
+                }
+            } else if (station.getName().equals(departureStation)) {
+                foundDeparture = true;
+            }
+        }
+
+        return departureInfos;
+    }
+
+    private LocalTime calculateDepartureTime(StationInfo station, LocalTime previousDepartureTime) {
+        // Calculate departure time based on the previous departure time and travel time
+        return previousDepartureTime.plusHours(station.getTravelTime().getHour())
+                .plusMinutes(station.getTravelTime().getMinute());
+    }
+
     /**
      * Initializes bus stations based on the available bus lines.
      */
@@ -142,7 +179,7 @@ public class StationManager {
                 return entry.getKey();
             }
         }
-        return null; // Geen overeenkomende lijn gevonden
+        return "No Line found";
     }
 
     public List<String> getTrainStations() {

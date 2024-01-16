@@ -3,26 +3,20 @@ package com.example.ovapp;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
-
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+//import static jdk.internal.org.jline.utils.Colors.s;
 
 
 /**
@@ -67,6 +61,8 @@ public class PlannerController {
     private Spinner<Integer> hourSpinner;
     @FXML
     private Spinner<Integer> minuteSpinner;
+    @FXML
+    private Label routeOutText1;
 
     /**
      * Searches for a route based on user inputs and displays the result.
@@ -84,8 +80,12 @@ public class PlannerController {
         LocalTime travelTime = routeInfo.getTotalTravelTime();
         Integer travelDistance = routeInfo.getTotalDistance();
 
+
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
+
+//            routeOutText1.setText(String.format("Stops along the route: %s", " stops" ));
+
 
             routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
@@ -95,7 +95,38 @@ public class PlannerController {
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
+        try {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
+            List<StationInfo> stations = stationRoutes.get("Intercity Line 1");
+            List<String> stops = getStopsAlongRoute(Departure, Arrival, stations);
+            routeOutText1.setText("Stops along the route:\n" + String.join("\n", stops));
+        } catch (NullPointerException e) {
+            routeOutText.setText(translator.translate("empty_field"));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
+
+    private List<String> getStopsAlongRoute(String departure, String arrival, List<StationInfo> stations) {
+        List<String> stops = new ArrayList<>();
+
+        boolean foundDeparture = false;
+
+        for (StationInfo station : stations) {
+            if (foundDeparture) {
+                stops.add(station.getName());
+                if (station.getName().equals(arrival)) {
+                    break;
+                }
+            } else if (station.getName().equals(departure)) {
+                foundDeparture = true;
+                stops.add(station.getName());
+            }
+        }
+
+        return stops;
+    }
+
 
     /**
      * Initializes the controller when the FXML file is loaded.
@@ -157,6 +188,7 @@ public class PlannerController {
      * @param departure The selected departure station.
      * @param arrival   The selected arrival station.
      */
+
     private void calculateRouteInfo(String departure, String arrival) {
         for (List<StationInfo> stations : stationRoutes.values()) {
             int totalDistanceTopToBottom = 0;

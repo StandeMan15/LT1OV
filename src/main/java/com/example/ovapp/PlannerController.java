@@ -62,6 +62,8 @@ public class PlannerController {
     private Spinner<Integer> hourSpinner;
     @FXML
     private Spinner<Integer> minuteSpinner;
+    @FXML
+    private Label routeOutText1;
 
     /**
      * Searches for a route based on user inputs and displays the result.
@@ -79,9 +81,9 @@ public class PlannerController {
         LocalTime DepartureTime= null;
 
         String selectedLine = stationManager.getLineForStation(Departure);
-
-
         List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime);
+
+        System.out.println("========================================");
         for (DepartureInfo departureInfo : departureInfos) {
             System.out.println("Station: " + departureInfo.getStation());
             System.out.println("Vertrektijd: " + departureInfo.getDepartureTime());
@@ -111,6 +113,27 @@ public class PlannerController {
             System.out.println(e.getMessage());
         }
     }
+
+    private List<String> getStopsAlongRoute(String departure, String arrival, List<StationInfo> stations) {
+        List<String> stops = new ArrayList<>();
+
+        boolean foundDeparture = false;
+
+        for (StationInfo station : stations) {
+            if (foundDeparture) {
+                stops.add(station.getName());
+                if (station.getName().equals(arrival)) {
+                    break;
+                }
+            } else if (station.getName().equals(departure)) {
+                foundDeparture = true;
+                stops.add(station.getName());
+            }
+        }
+
+        return stops;
+    }
+
 
     /**
      * Initializes the controller when the FXML file is loaded.
@@ -172,30 +195,54 @@ public class PlannerController {
      * @param departure The selected departure station.
      * @param arrival   The selected arrival station.
      */
-    void calculateRouteInfo(String departure, String arrival) {
+
+    private void calculateRouteInfo(String departure, String arrival) {
         for (List<StationInfo> stations : stationRoutes.values()) {
-            int totalDistance = 0;
-            LocalTime totalTravelTime = LocalTime.of(0, 0);
+            int totalDistanceTopToBottom = 0;
+            LocalTime totalTravelTimeTopToBottom = LocalTime.of(0, 0);
 
-            boolean foundDeparture = false;
+            int totalDistanceBottomToTop = 0;
+            LocalTime totalTravelTimeBottomToTop = LocalTime.of(0, 0);
 
+            boolean foundDepartureTopToBottom = false;
+            boolean foundDepartureBottomToTop = false;
+
+            // Top to Bottom
             for (StationInfo station : stations) {
-                if (foundDeparture) {
-                    totalDistance += station.getDistance();
-                    totalTravelTime = totalTravelTime.plusHours(station.getTravelTime().getHour())
+                if (foundDepartureTopToBottom) {
+                    totalDistanceTopToBottom += station.getDistance();
+                    totalTravelTimeTopToBottom = totalTravelTimeTopToBottom.plusHours(station.getTravelTime().getHour())
                             .plusMinutes(station.getTravelTime().getMinute());
                     if (station.getName().equals(arrival)) {
-                        routeInfo.setTotalDistance(totalDistance);
-                        routeInfo.setTotalTravelTime(totalTravelTime);
-                        return;  // Onderbreek de loop wanneer het aankomststation is bereikt
+                        routeInfo.setTotalDistance(totalDistanceTopToBottom);
+                        routeInfo.setTotalTravelTime(totalTravelTimeTopToBottom);
+                        return;
                     }
                 } else if (station.getName().equals(departure)) {
-                    foundDeparture = true;
+                    foundDepartureTopToBottom = true;
+                }
+            }
+
+            // Bottom to Top
+            ListIterator<StationInfo> iterator = stations.listIterator(stations.size());
+            while (iterator.hasPrevious()) {
+                StationInfo station = iterator.previous();
+
+                if (foundDepartureBottomToTop) {
+                    totalDistanceBottomToTop += station.getDistance();
+                    totalTravelTimeBottomToTop = totalTravelTimeBottomToTop.plusHours(station.getTravelTime().getHour())
+                            .plusMinutes(station.getTravelTime().getMinute());
+                    if (station.getName().equals(arrival)) {
+                        routeInfo.setTotalDistance(totalDistanceBottomToTop);
+                        routeInfo.setTotalTravelTime(totalTravelTimeBottomToTop);
+                        return;
+                    }
+                } else if (station.getName().equals(departure)) {
+                    foundDepartureBottomToTop = true;
                 }
             }
         }
     }
-
 
     /**
      * Initializes language change buttons.

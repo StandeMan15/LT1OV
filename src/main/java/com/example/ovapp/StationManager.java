@@ -52,7 +52,7 @@ public class StationManager {
         List<StationInfo> busLine1 = Arrays.asList(
                 new StationInfo("Rotterdam", 0, LocalTime.of(0, 0), ""),
                 new StationInfo("Delft", 15, LocalTime.of(0, 12), ""),
-                new StationInfo("The Hague", 18, LocalTime.of(0, 15), ""),
+                new StationInfo("Den Haag", 18, LocalTime.of(0, 15), ""),
                 new StationInfo("Leiden", 22, LocalTime.of(0, 18), "")
         );
 

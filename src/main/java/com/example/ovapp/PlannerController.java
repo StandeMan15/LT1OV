@@ -81,9 +81,8 @@ public class PlannerController {
         LocalTime DepartureTime= null;
 
         String selectedLine = stationManager.getLineForStation(Departure);
-
-
         List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime);
+
         for (DepartureInfo departureInfo : departureInfos) {
             System.out.println("Station: " + departureInfo.getStation());
             System.out.println("Vertrektijd: " + departureInfo.getDepartureTime());
@@ -113,7 +112,6 @@ public class PlannerController {
             System.out.println(e.getMessage());
         }
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
             List<StationInfo> stations = stationRoutes.get("Intercity Line 1");
             List<String> stops = getStopsAlongRoute(Departure, Arrival, stations);
             routeOutText1.setText("Stops along the route:\n" + String.join("\n", stops));

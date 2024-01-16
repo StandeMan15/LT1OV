@@ -117,9 +117,9 @@ public class PlannerController {
                 }
             }
 
-            routeOutText1.setText("Stops along the route:\n" + String.join("\n", stops));
+            routeOutText1.setText(translator.translate("route_message_stops") + "\n" + String.join("\n", stops));
         } catch (NullPointerException e) {
-            routeOutText.setText(translator.translate("empty_field"));
+            routeOutText1.setText(translator.translate("empty_field"));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -163,7 +163,6 @@ public class PlannerController {
         arrivalLabel.setText(translator.translate("arrival_label"));
         timeDateLabel.setText(translator.translate("time_date_label"));
         transportLabel.setText(translator.translate("transport_label"));
-        routeOutText1.setText(translator.translate("route_message_stops"));
 
         int selectedVehicleIndex = vehicleSelectionComboBox.getSelectionModel().getSelectedIndex();
 
@@ -174,7 +173,9 @@ public class PlannerController {
             vehicleSelectionComboBox.getSelectionModel().select(selectedVehicleIndex);
         }
 
-        if (!routeOutText.getText().isEmpty()) SearchRoute();
+        if (!routeOutText.getText().isEmpty()) {
+            SearchRoute();
+        }
 
         datePicker.setConverter(createDateConverter());
         datePicker.setValue(datePicker.getValue());

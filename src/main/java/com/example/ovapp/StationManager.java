@@ -50,10 +50,10 @@ public class StationManager {
                 new StationInfo("Amsterdam Centraal", 6, LocalTime.of(0, 8), "")
         );
         List<StationInfo> busLine1 = Arrays.asList(
-                new StationInfo("Rotterdam", 0, LocalTime.of(0, 0), ""),
-                new StationInfo("Delft", 15, LocalTime.of(0, 12), ""),
-                new StationInfo("Den Haag", 18, LocalTime.of(0, 15), ""),
-                new StationInfo("Leiden", 22, LocalTime.of(0, 18), "")
+                new StationInfo("Eemsplein", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Stadhuis", 15, LocalTime.of(0, 12), ""),
+                new StationInfo("Centrum", 18, LocalTime.of(0, 15), ""),
+                new StationInfo("", 22, LocalTime.of(0, 18), "")
         );
 
         List<StationInfo> busLine2 = Arrays.asList(
@@ -69,6 +69,22 @@ public class StationManager {
         stationRoutes.put("Bus Line 2", busLine2);
     }
 
+    private void initializeLineDepartureTimes() {
+        lineDepartureTimes.put("Intercity Line 1", Arrays.asList(LocalTime.of(11, 0), LocalTime.of(14, 0), LocalTime.of(20, 0)));
+        lineDepartureTimes.put("Intercity Line 2", Arrays.asList(LocalTime.of(10, 30), LocalTime.of(15, 30), LocalTime.of(21, 30)));
+        lineDepartureTimes.put("Bus Line 1", Arrays.asList(LocalTime.of(8, 0), LocalTime.of(12, 0), LocalTime.of(16, 0)));
+        lineDepartureTimes.put("Bus Line 2", Arrays.asList(LocalTime.of(9, 30), LocalTime.of(13, 30), LocalTime.of(17, 30)));
+    }
+
+    /**
+     * Retrieves departure times for a specific station along a given line, considering selected time and arrival station.
+     *
+     * @param departureStation The name of the departure station.
+     * @param line             The line on which the departure station is located.
+     * @param selectedTime     The selected time for finding departure times.
+     * @param arrivalStation   The name of the arrival station.
+     * @return A list of DepartureInfo objects representing departure times and stations along the route.
+     */
     public List<DepartureInfo> getDepartureTimesForStation(String departureStation, String line, LocalTime selectedTime, String arrivalStation) {
         List<StationInfo> stations = stationRoutes.get(line);
         List<DepartureInfo> departureInfos = new ArrayList<>();
@@ -82,20 +98,18 @@ public class StationManager {
             }
             if (stations.get(i).getName().equals(arrivalStation)) {
                 endIndex = i;
-                break;  // Stop de lus zodra het eindstation is gevonden
+                break;
             }
         }
 
         if (startIndex != -1 && endIndex != -1 && startIndex <= endIndex) {
-            LocalTime currentTime = getNextDepartureTime(line, selectedTime); // Use the next departure time
+            LocalTime currentTime = getNextDepartureTime(line, selectedTime);
 
             for (int i = startIndex; i <= endIndex; i++) {
                 StationInfo station = stations.get(i);
 
-                // Calculate the travel time from the previous station to the current station
                 LocalTime travelTime = station.getTravelTime();
 
-                // Calculate the departure time for the current station
                 LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
 
                 departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
@@ -110,10 +124,14 @@ public class StationManager {
         return departureInfos;
     }
 
-
-
+    /**
+     * Calculates the next departure time based on the travel time of the current station.
+     *
+     * @param station              The current station.
+     * @param previousDepartureTime The time of the previous departure.
+     * @return The calculated next departure time.
+     */
     private LocalTime calculateDepartureTime(StationInfo station, LocalTime previousDepartureTime) {
-        // Calculate departure time based on the previous departure time and travel time
         return previousDepartureTime.plusHours(station.getTravelTime().getHour())
                 .plusMinutes(station.getTravelTime().getMinute());
     }
@@ -126,6 +144,9 @@ public class StationManager {
         busStations.addAll(getStationsForLine("Bus Line 2"));
     }
 
+    /**
+     * Initializes bus stations based on the available bus lines
+     */
     private void initializeTrainStations() {
         trainStations = getStationsForLine("Intercity Line 1");
         trainStations.addAll(getStationsForLine("Intercity Line 2"));
@@ -138,14 +159,13 @@ public class StationManager {
                 .collect(Collectors.toList());
     }
 
-    private void initializeLineDepartureTimes() {
-        lineDepartureTimes.put("Intercity Line 1", Arrays.asList(LocalTime.of(11, 0), LocalTime.of(14, 0), LocalTime.of(20, 0)));
-        lineDepartureTimes.put("Intercity Line 2", Arrays.asList(LocalTime.of(10, 30), LocalTime.of(15, 30), LocalTime.of(21, 30)));
-        lineDepartureTimes.put("Bus Line 1", Arrays.asList(LocalTime.of(8, 0), LocalTime.of(12, 0), LocalTime.of(16, 0)));
-        lineDepartureTimes.put("Bus Line 2", Arrays.asList(LocalTime.of(9, 30), LocalTime.of(13, 30), LocalTime.of(17, 30)));
-    }
-
-
+    /**
+     * Retrieves the next departure time after the selected time for a specific line.
+     *
+     * @param line       The line for which departure times are considered.
+     * @param SelectTime The selected time for finding the next departure time.
+     * @return The next departure time after the selected time, or the first departure time of the next day if none is found.
+     */
     private LocalTime getNextDepartureTime(String line, LocalTime SelectTime) {
         List<LocalTime> departureTimes = lineDepartureTimes.getOrDefault(line, Collections.emptyList());
 
@@ -160,6 +180,12 @@ public class StationManager {
         return departureTimes.isEmpty() ? null : departureTimes.get(0);
     }
 
+    /**
+     * Retrieves the line associated with a given departure station.
+     *
+     * @param departureStation The name of the departure station.
+     * @return The line associated with the departure station, or "No Line found" if not found.
+     */
     String getLineForStation(String departureStation) {
         for (Map.Entry<String, List<StationInfo>> entry : stationRoutes.entrySet()) {
             List<String> stationNames = entry.getValue().stream()

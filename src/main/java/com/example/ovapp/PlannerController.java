@@ -81,8 +81,11 @@ public class PlannerController {
         LocalTime DepartureTime= null;
 
         String selectedLine = stationManager.getLineForStation(Departure);
+
+
         List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime);
 
+        System.out.println("========================================");
         for (DepartureInfo departureInfo : departureInfos) {
             System.out.println("Station: " + departureInfo.getStation());
             System.out.println("Vertrektijd: " + departureInfo.getDepartureTime());
@@ -251,6 +254,7 @@ public class PlannerController {
             }
         }
     }
+
 
     /**
      * Initializes language change buttons.

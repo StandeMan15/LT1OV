@@ -117,7 +117,7 @@ public class PlannerController {
         try {
             List<StationInfo> stations = stationRoutes.get("Intercity Line 1");
             List<String> stops = getStopsAlongRoute(Departure, Arrival, stations);
-            routeOutText1.setText("Stops along the route:\n" + String.join("\n", stops));
+            routeOutText1.setText(String.format(translator.translate("route_message_stops"))+"\n" + String.join("\n", stops));
         } catch (NullPointerException e) {
             routeOutText.setText(translator.translate("empty_field"));
         } catch (Exception e) {
@@ -184,6 +184,7 @@ public class PlannerController {
         arrivalLabel.setText(translator.translate("arrival_label"));
         timeDateLabel.setText(translator.translate("time_date_label"));
         transportLabel.setText(translator.translate("transport_label"));
+        routeOutText1.setText(translator.translate("route_message_stops"));
 
         int selectedVehicleIndex = vehicleSelectionComboBox.getSelectionModel().getSelectedIndex();
 

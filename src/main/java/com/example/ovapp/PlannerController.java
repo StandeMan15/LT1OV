@@ -119,7 +119,7 @@ public class PlannerController {
 
             routeOutText1.setText("Stops along the route:\n" + String.join("\n", stops));
         } catch (NullPointerException e) {
-            routeOutText1.setText(translator.translate("empty_field"));
+            routeOutText.setText(translator.translate("empty_field"));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

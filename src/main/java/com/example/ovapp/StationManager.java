@@ -97,7 +97,6 @@ public class StationManager {
         return foundDeparture ? departureInfos : Collections.emptyList();
     }
 
-
     private LocalTime calculateDepartureTime(StationInfo station, LocalTime previousDepartureTime) {
         // Calculate departure time based on the previous departure time and travel time
         return previousDepartureTime.plusHours(station.getTravelTime().getHour())
@@ -129,28 +128,6 @@ public class StationManager {
         lineDepartureTimes.put("Intercity Line 2", Arrays.asList(LocalTime.of(10, 30), LocalTime.of(15, 30), LocalTime.of(21, 30)));
         lineDepartureTimes.put("Bus Line 1", Arrays.asList(LocalTime.of(8, 0), LocalTime.of(12, 0), LocalTime.of(16, 0)));
         lineDepartureTimes.put("Bus Line 2", Arrays.asList(LocalTime.of(9, 30), LocalTime.of(13, 30), LocalTime.of(17, 30)));
-    }
-
-    private boolean isLineAvailable(String line, LocalTime currentTime) {
-        LocalTime nextDepartureTime = getNextDepartureTime(line, currentTime);
-
-        return nextDepartureTime != null;
-    }
-
-    NextDepartureInfo getNextDepartureInfo(LocalTime currentTime, String selectedLine) {
-        String availableLine = null;
-        LocalTime nextDepartureTime = null;
-
-        if (isLineAvailable(selectedLine, currentTime)) {
-            // Bepaal de eerstvolgende vertrektijd voor de geselecteerde lijn
-            nextDepartureTime = getNextDepartureTime(selectedLine, currentTime);
-
-            if (nextDepartureTime != null) {
-                availableLine = selectedLine;
-            }
-        }
-
-        return new NextDepartureInfo(availableLine, nextDepartureTime);
     }
 
     private LocalTime getNextDepartureTime(String line, LocalTime SelectTime) {

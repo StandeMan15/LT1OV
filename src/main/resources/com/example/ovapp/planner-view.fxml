@@ -10,12 +10,7 @@
     <opaqueInsets>
         <Insets />
     </opaqueInsets>
-    <Button fx:id="searchButton" layoutX="587.0" layoutY="597.0" onAction="#SearchRoute" text="Zoek route">
-        <font>
-            <Font size="24.0" />
-        </font>
-    </Button>
-    <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="71.0" layoutY="304.0" prefHeight="344.0" prefWidth="502.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
+    <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="71.0" layoutY="329.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
         <opaqueInsets>
             <Insets />
         </opaqueInsets>
@@ -70,8 +65,8 @@
          </graphic>
         </Button>
     </HBox>
-    <HBox alignment="TOP_RIGHT" layoutX="74.0" layoutY="105.0" prefHeight="190.0" prefWidth="590.0">
-        <VBox prefHeight="190.0" prefWidth="352.0" spacing="2.0">
+    <HBox alignment="TOP_RIGHT" layoutX="71.0" layoutY="91.0" prefHeight="191.0" prefWidth="657.0">
+        <VBox prefHeight="191.0" prefWidth="276.0" spacing="2.0">
             <Label fx:id="departLabel">
                 <font>
                     <Font size="30.0" />
@@ -93,30 +88,46 @@
                 </font>
             </Label>
         </VBox>
-        <VBox prefHeight="190.0" prefWidth="368.0" spacing="5.0">
+        <VBox prefHeight="191.0" prefWidth="350.0" spacing="5.0">
             <opaqueInsets>
                 <Insets />
             </opaqueInsets>
             <HBox.margin>
                 <Insets />
             </HBox.margin>
-            <ComboBox fx:id="departureComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;">
+            <ComboBox fx:id="departureComboBox" prefHeight="44.0" prefWidth="259.0" style="-fx-font-size: 20;">
                 <opaqueInsets>
                     <Insets />
                 </opaqueInsets>
             </ComboBox>
-            <ComboBox fx:id="arrivalComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;" />
-            <ComboBox fx:id="vehicleSelectionComboBox" prefHeight="43.0" prefWidth="203.0" style="-fx-font-size: 20;" />
+            <ComboBox fx:id="arrivalComboBox" prefHeight="44.0" prefWidth="255.0" style="-fx-font-size: 20;" />
+            <ComboBox fx:id="vehicleSelectionComboBox" prefHeight="44.0" prefWidth="257.0" style="-fx-font-size: 20;" />
             <HBox prefHeight="100.0" prefWidth="200.0">
-                <Spinner fx:id="hourSpinner" prefHeight="43.0" prefWidth="101.0" style="-fx-font-size: 20;" />
-                <Spinner fx:id="minuteSpinner" prefHeight="43.0" prefWidth="101.0" style="-fx-font-size: 20;" />
+                <Spinner fx:id="hourSpinner" prefHeight="44.0" prefWidth="126.0" style="-fx-font-size: 20;" />
+                <Spinner fx:id="minuteSpinner" prefHeight="44.0" prefWidth="122.0" style="-fx-font-size: 20;" />
             </HBox>
         </VBox>
         <VBox alignment="BOTTOM_LEFT" prefHeight="190.0" prefWidth="337.0">
             <padding>
                 <Insets bottom="3.0" />
             </padding>
-            <DatePicker fx:id="datePicker" prefHeight="43.0" prefWidth="196.0" style="-fx-font-size: 20;" />
+            <DatePicker fx:id="datePicker" prefHeight="44.0" prefWidth="238.0" style="-fx-font-size: 20;" />
         </VBox>
     </HBox>
+    <Button fx:id="searchButton" layoutX="74.0" layoutY="282.0" onAction="#SearchRoute" prefHeight="44.0" prefWidth="867.0" style="-fx-background-color: red;">
+        <font>
+            <Font name="System Bold" size="20.0" />
+        </font>
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+    </Button>
+   <Label fx:id="routeOutText1" alignment="TOP_LEFT" layoutX="515.0" layoutY="329.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+      <font>
+         <Font size="30.0" />
+      </font>
+   </Label>
 </Pane>

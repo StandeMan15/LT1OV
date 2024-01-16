@@ -75,30 +75,28 @@ public class StationManager {
         List<DepartureInfo> departureInfos = new ArrayList<>();
         boolean foundDeparture = false;
 
-        LocalTime currentTime = getNextDepartureTime(line, selectedTime); // Use the next departure time
+        LocalTime currentTime = getNextDepartureTime(line, selectedTime);
 
         for (StationInfo station : stations) {
-            if (foundDeparture) {
-                // Calculate the travel time from the previous station to the current station
-                LocalTime travelTime = station.getTravelTime();
+            // Calculate the travel time from the previous station to the current station
+            LocalTime travelTime = station.getTravelTime();
 
-                // Calculate the departure time for the current station
-                LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
+            // Calculate the departure time for the current station
+            LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
 
-                departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
+            departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
 
-                currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
-
-                if (station.getName().equals(departureStation)) {
-                    break;
-                }
-            } else if (station.getName().equals(departureStation)) {
+            if (station.getName().equals(departureStation)) {
                 foundDeparture = true;
+                break;  // Stop de loop zodra het vertrekstation is gevonden
             }
+
+            currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
         }
 
-        return departureInfos;
+        return foundDeparture ? departureInfos : Collections.emptyList();
     }
+
 
     private LocalTime calculateDepartureTime(StationInfo station, LocalTime previousDepartureTime) {
         // Calculate departure time based on the previous departure time and travel time

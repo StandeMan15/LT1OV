@@ -76,15 +76,22 @@ public class PlannerController {
         Integer minuteTime = minuteSpinner.getValue();
 
         LocalTime selectedTime = LocalTime.of(hourTime, minuteTime);
+        LocalTime DepartureTime= null;
 
         String selectedLine = stationManager.getLineForStation(Departure);
-        NextDepartureInfo nextDepartureInfo = stationManager.getNextDepartureInfo(selectedTime, selectedLine);
-        LocalTime nextDepartureTime = nextDepartureInfo.getNextDepartureTime();
+
 
         List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime);
         for (DepartureInfo departureInfo : departureInfos) {
             System.out.println("Station: " + departureInfo.getStation());
             System.out.println("Vertrektijd: " + departureInfo.getDepartureTime());
+        }
+
+        for (DepartureInfo departureInfo : departureInfos) {
+            if (departureInfo.getStation().equals(Departure)) {
+                DepartureTime = departureInfo.getDepartureTime();
+                break;
+            }
         }
 
         calculateRouteInfo(Departure, Arrival);
@@ -96,7 +103,7 @@ public class PlannerController {
 
             routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
-                    nextDepartureTime,
+                    DepartureTime,
                     travelTime, travelDistance));
         } catch (NullPointerException e) {
             routeOutText.setText(translator.translate("empty_field"));

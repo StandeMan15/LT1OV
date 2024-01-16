@@ -83,7 +83,7 @@ public class PlannerController {
         String selectedLine = stationManager.getLineForStation(Departure);
 
 
-        List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime);
+        List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime, Arrival);
 
         System.out.println("========================================");
         for (DepartureInfo departureInfo : departureInfos) {

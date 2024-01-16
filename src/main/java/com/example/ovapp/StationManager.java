@@ -69,15 +69,29 @@ public class StationManager {
         stationRoutes.put("Bus Line 2", busLine2);
     }
 
-    public List<DepartureInfo> getDepartureTimesForStation(String departureStation, String line, LocalTime selectedTime) {
+    public List<DepartureInfo> getDepartureTimesForStation(String departureStation, String line, LocalTime selectedTime, String arrivalStation) {
         List<StationInfo> stations = stationRoutes.get(line);
         List<DepartureInfo> departureInfos = new ArrayList<>();
-        boolean foundDeparture = false;
 
-        LocalTime currentTime = getNextDepartureTime(line, selectedTime); // Use the next departure time
+        int startIndex = -1;
+        int endIndex = -1;
 
-        for (StationInfo station : stations) {
-            if (foundDeparture) {
+        for (int i = 0; i < stations.size(); i++) {
+            if (stations.get(i).getName().equals(departureStation)) {
+                startIndex = i;
+            }
+            if (stations.get(i).getName().equals(arrivalStation)) {
+                endIndex = i;
+                break;  // Stop de lus zodra het eindstation is gevonden
+            }
+        }
+
+        if (startIndex != -1 && endIndex != -1 && startIndex <= endIndex) {
+            LocalTime currentTime = getNextDepartureTime(line, selectedTime); // Use the next departure time
+
+            for (int i = startIndex; i <= endIndex; i++) {
+                StationInfo station = stations.get(i);
+
                 // Calculate the travel time from the previous station to the current station
                 LocalTime travelTime = station.getTravelTime();
 
@@ -85,18 +99,18 @@ public class StationManager {
                 LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
 
                 departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
+
                 currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
 
-                if (station.getName().equals(departureStation)) {
-                    break;
-                }
-            } else if (station.getName().equals(departureStation)) {
-                foundDeparture = true;
             }
+        } else {
+            System.out.println("Invalid start or end index for stations.");
         }
 
         return departureInfos;
     }
+
+
 
     private LocalTime calculateDepartureTime(StationInfo station, LocalTime previousDepartureTime) {
         // Calculate departure time based on the previous departure time and travel time

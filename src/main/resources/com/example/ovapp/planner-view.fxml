@@ -114,7 +114,7 @@
             <DatePicker fx:id="datePicker" prefHeight="44.0" prefWidth="238.0" style="-fx-font-size: 20;" />
         </VBox>
     </HBox>
-    <Button fx:id="searchButton" layoutX="69.0" layoutY="282.0" onAction="#SearchRoute" prefHeight="43.0" prefWidth="872.0" style="-fx-background-color: #FFAE00; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 3px;">
+    <Button fx:id="searchButton" layoutX="69.0" layoutY="282.0" onAction="#SearchRoute" prefHeight="43.0" prefWidth="872.0" style="-fx-background-color: #39FF14; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 3px;" textFill="#ff00e8">
         <font>
             <Font name="System Bold" size="20.0" />
         </font>

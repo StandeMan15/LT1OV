@@ -27,7 +27,7 @@ public class StationManager {
      */
     private void initializeStationRoutes() {
         List<StationInfo> intercityLine1 = Arrays.asList(
-                new StationInfo("Den Haag Centraal", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Den Haag Centraal", 29, LocalTime.of(0, 18), ""),
                 new StationInfo("Gouda", 29, LocalTime.of(0, 18), ""),
                 new StationInfo("Utrecht Centraal", 36, LocalTime.of(0, 18), ""),
                 new StationInfo("Amersfoort Centraal", 24, LocalTime.of(0, 13), ""),
@@ -39,7 +39,7 @@ public class StationManager {
         );
 
         List<StationInfo> intercityLine2 = Arrays.asList(
-                new StationInfo("Maastricht", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Maastricht", 24, LocalTime.of(0, 15), ""),
                 new StationInfo("Sittard", 24, LocalTime.of(0, 15), ""),
                 new StationInfo("Roermond", 26, LocalTime.of(0, 14), ""),
                 new StationInfo("Weert", 25, LocalTime.of(0, 14), ""),
@@ -50,14 +50,14 @@ public class StationManager {
                 new StationInfo("Amsterdam Centraal", 6, LocalTime.of(0, 8), "")
         );
         List<StationInfo> busLine1 = Arrays.asList(
-                new StationInfo("Eemsplein", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Eemsplein", 1, LocalTime.of(0, 5), ""),
                 new StationInfo("Stadhuis", 1, LocalTime.of(0, 5), ""),
                 new StationInfo("Centrum", 1, LocalTime.of(0, 3), ""),
                 new StationInfo("t'Kip", 4, LocalTime.of(0, 10), "")
         );
 
         List<StationInfo> busLine2 = Arrays.asList(
-                new StationInfo("Politie bureau", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Politie bureau", 3, LocalTime.of(0, 4), ""),
                 new StationInfo("Wolweg", 3, LocalTime.of(0, 4), ""),
                 new StationInfo("Prinselaan", 5, LocalTime.of(0, 9), ""),
                 new StationInfo("Markt", 5, LocalTime.of(0, 7), "")

@@ -5,9 +5,9 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Translator {
-    private static ResourceBundle messages;
+    private ResourceBundle messages;
 
-    public static void setLanguage(String language) {
+    public void setLanguage(String language) {
         try {
             Locale locale = new Locale(language);
             messages = ResourceBundle.getBundle("com.example.ovapp.MessagesBundle", locale);
@@ -16,7 +16,7 @@ public class Translator {
         }
     }
 
-    public static String translate(String key) {
+    public String translate(String key) {
         try {
             return messages.getString(key);
         } catch (Exception e) {

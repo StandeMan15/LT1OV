@@ -2,3 +2,9 @@
 
 target/
 *.class
+qodana.yaml
+target/classes/com/example/ovapp/hello-view.fxml
+target/classes/com/example/ovapp/HelloApplication.class
+target/classes/com/example/ovapp/HelloController.class
+target/classes/module-info.class
+target/classes/com/example/ovapp/hello-view.fxml

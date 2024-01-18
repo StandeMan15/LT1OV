@@ -104,7 +104,6 @@ public class StationManager {
 
         if (startIndex != -1 && endIndex != -1) {
             LocalTime currentTime = getNextDepartureTime(line, selectedTime);
-            System.out.println(currentTime);
 
             if (startIndex <= endIndex) {
                 // Traverse from top to bottom

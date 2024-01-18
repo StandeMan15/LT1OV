@@ -121,7 +121,7 @@ public class PlannerController {
 
             for (DepartureInfo departureInfo : departureInfos) {
                 if (!departureInfo.getStation().equals(Departure)) {
-                    stops.add(departureInfo.getDepartureTime() + " " + departureInfo.getStation());
+                    stops.add(" " + departureInfo.getDepartureTime() + " " + departureInfo.getStation());
                 }
             }
 

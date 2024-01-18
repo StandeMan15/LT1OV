@@ -45,6 +45,8 @@ public class PlannerController {
     @FXML
     private Label routeOutText;
     @FXML
+    private Label routeOutText1;
+    @FXML
     private Label departLabel;
     @FXML
     private Label arrivalLabel;
@@ -60,8 +62,6 @@ public class PlannerController {
     private Spinner<Integer> hourSpinner;
     @FXML
     private Spinner<Integer> minuteSpinner;
-    @FXML
-    private Label routeOutText1;
 
     /**
      * Searches for a route based on user inputs and displays the result.

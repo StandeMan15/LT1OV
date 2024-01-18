@@ -10,7 +10,7 @@
     <opaqueInsets>
         <Insets />
     </opaqueInsets>
-    <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="71.0" layoutY="329.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
+    <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="71.0" layoutY="332.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
         <opaqueInsets>
             <Insets />
         </opaqueInsets>
@@ -114,7 +114,7 @@
             <DatePicker fx:id="datePicker" prefHeight="44.0" prefWidth="238.0" style="-fx-font-size: 20;" />
         </VBox>
     </HBox>
-    <Button fx:id="searchButton" layoutX="74.0" layoutY="282.0" onAction="#SearchRoute" prefHeight="44.0" prefWidth="867.0" style="-fx-background-color: red;">
+    <Button fx:id="searchButton" layoutX="69.0" layoutY="282.0" onAction="#SearchRoute" prefHeight="43.0" prefWidth="872.0" style="-fx-background-color: #FFAE00; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 3px;">
         <font>
             <Font name="System Bold" size="20.0" />
         </font>
@@ -122,7 +122,7 @@
          <Insets />
       </opaqueInsets>
     </Button>
-   <Label fx:id="routeOutText1" alignment="TOP_LEFT" layoutX="515.0" layoutY="329.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
+   <Label fx:id="routeOutText1" alignment="TOP_LEFT" layoutX="515.0" layoutY="332.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
       <opaqueInsets>
          <Insets />
       </opaqueInsets>

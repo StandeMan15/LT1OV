@@ -92,9 +92,17 @@ public class PlannerController {
             }
         }
 
+        if (DepartureTime == null) {
+            routeOutText.setText(String.format(translator.translate("no_route_found_message"),
+                    Vehicle, Departure, Arrival));
+            routeOutText1.setText("");
+            return; // Exit the method as there is no route
+        }
+
         calculateRouteInfo(Departure, Arrival);
         LocalTime travelTime = routeInfo.getTotalTravelTime();
         Integer travelDistance = routeInfo.getTotalDistance();
+
 
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));

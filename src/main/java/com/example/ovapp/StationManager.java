@@ -93,29 +93,41 @@ public class StationManager {
         int endIndex = -1;
 
         for (int i = 0; i < stations.size(); i++) {
+
             if (stations.get(i).getName().equals(departureStation)) {
                 startIndex = i;
             }
             if (stations.get(i).getName().equals(arrivalStation)) {
                 endIndex = i;
-                break;
             }
         }
 
-        if (startIndex != -1 && endIndex != -1 && startIndex <= endIndex) {
+        if (startIndex != -1 && endIndex != -1) {
             LocalTime currentTime = getNextDepartureTime(line, selectedTime);
+            System.out.println(currentTime);
 
-            for (int i = startIndex; i <= endIndex; i++) {
-                StationInfo station = stations.get(i);
+            if (startIndex <= endIndex) {
+                // Traverse from top to bottom
+                for (int i = startIndex; i <= endIndex; i++) {
+                    StationInfo station = stations.get(i);
+                    LocalTime travelTime = station.getTravelTime();
+                    LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
 
-                LocalTime travelTime = station.getTravelTime();
+                    departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
 
-                LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
+                    currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
+                }
+            } else {
+                // Traverse from bottom to top
+                for (int i = startIndex; i >= endIndex; i--) {
+                    StationInfo station = stations.get(i);
+                    LocalTime travelTime = station.getTravelTime();
+                    LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
 
-                departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
+                    departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
 
-                currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
-
+                    currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
+                }
             }
         } else {
             System.out.println("Invalid start or end index for stations.");
@@ -123,6 +135,7 @@ public class StationManager {
 
         return departureInfos;
     }
+
 
     /**
      * Calculates the next departure time based on the travel time of the current station.

@@ -27,7 +27,7 @@ public class StationManager {
      */
     private void initializeStationRoutes() {
         List<StationInfo> intercityLine1 = Arrays.asList(
-                new StationInfo("Den Haag Centraal", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Den Haag Centraal", 29, LocalTime.of(0, 18), ""),
                 new StationInfo("Gouda", 29, LocalTime.of(0, 18), ""),
                 new StationInfo("Utrecht Centraal", 36, LocalTime.of(0, 18), ""),
                 new StationInfo("Amersfoort Centraal", 24, LocalTime.of(0, 13), ""),
@@ -39,7 +39,7 @@ public class StationManager {
         );
 
         List<StationInfo> intercityLine2 = Arrays.asList(
-                new StationInfo("Maastricht", 0, LocalTime.of(0, 0), ""),
+                new StationInfo("Maastricht", 24, LocalTime.of(0, 15), ""),
                 new StationInfo("Sittard", 24, LocalTime.of(0, 15), ""),
                 new StationInfo("Roermond", 26, LocalTime.of(0, 14), ""),
                 new StationInfo("Weert", 25, LocalTime.of(0, 14), ""),
@@ -50,17 +50,17 @@ public class StationManager {
                 new StationInfo("Amsterdam Centraal", 6, LocalTime.of(0, 8), "")
         );
         List<StationInfo> busLine1 = Arrays.asList(
-                new StationInfo("Rotterdam", 0, LocalTime.of(0, 0), ""),
-                new StationInfo("Delft", 15, LocalTime.of(0, 12), ""),
-                new StationInfo("Den Haag", 18, LocalTime.of(0, 15), ""),
-                new StationInfo("Leiden", 22, LocalTime.of(0, 18), "")
+                new StationInfo("Eemplein", 1, LocalTime.of(0, 5), ""),
+                new StationInfo("Stadhuis", 1, LocalTime.of(0, 5), ""),
+                new StationInfo("Centrum", 1, LocalTime.of(0, 3), ""),
+                new StationInfo("t'Kip", 4, LocalTime.of(0, 10), "")
         );
 
         List<StationInfo> busLine2 = Arrays.asList(
-                new StationInfo("Utrecht", 0, LocalTime.of(0, 0), ""),
-                new StationInfo("Zeist", 12, LocalTime.of(0, 10), ""),
-                new StationInfo("Amersfoort", 25, LocalTime.of(0, 20), ""),
-                new StationInfo("Hilversum", 30, LocalTime.of(0, 25), "")
+                new StationInfo("Politie bureau", 3, LocalTime.of(0, 4), ""),
+                new StationInfo("Wolweg", 3, LocalTime.of(0, 4), ""),
+                new StationInfo("Prinselaan", 5, LocalTime.of(0, 9), ""),
+                new StationInfo("Markt", 5, LocalTime.of(0, 7), "")
         );
 
         stationRoutes.put("Intercity Line 1", intercityLine1);
@@ -69,6 +69,22 @@ public class StationManager {
         stationRoutes.put("Bus Line 2", busLine2);
     }
 
+    private void initializeLineDepartureTimes() {
+        lineDepartureTimes.put("Intercity Line 1", Arrays.asList(LocalTime.of(11, 0), LocalTime.of(14, 0), LocalTime.of(20, 0)));
+        lineDepartureTimes.put("Intercity Line 2", Arrays.asList(LocalTime.of(10, 30), LocalTime.of(15, 30), LocalTime.of(21, 30)));
+        lineDepartureTimes.put("Bus Line 1", Arrays.asList(LocalTime.of(8, 0), LocalTime.of(12, 0), LocalTime.of(16, 0)));
+        lineDepartureTimes.put("Bus Line 2", Arrays.asList(LocalTime.of(9, 30), LocalTime.of(13, 30), LocalTime.of(17, 30)));
+    }
+
+    /**
+     * Retrieves departure times for a specific station along a given line, considering selected time and arrival station.
+     *
+     * @param departureStation The name of the departure station.
+     * @param line             The line on which the departure station is located.
+     * @param selectedTime     The selected time for finding departure times.
+     * @param arrivalStation   The name of the arrival station.
+     * @return A list of DepartureInfo objects representing departure times and stations along the route.
+     */
     public List<DepartureInfo> getDepartureTimesForStation(String departureStation, String line, LocalTime selectedTime, String arrivalStation) {
         List<StationInfo> stations = stationRoutes.get(line);
         List<DepartureInfo> departureInfos = new ArrayList<>();
@@ -77,32 +93,44 @@ public class StationManager {
         int endIndex = -1;
 
         for (int i = 0; i < stations.size(); i++) {
+
             if (stations.get(i).getName().equals(departureStation)) {
                 startIndex = i;
             }
             if (stations.get(i).getName().equals(arrivalStation)) {
                 endIndex = i;
-                break;  // Stop de lus zodra het eindstation is gevonden
             }
         }
 
-        if (startIndex != -1 && endIndex != -1 && startIndex <= endIndex) {
-            LocalTime currentTime = getNextDepartureTime(line, selectedTime); // Use the next departure time
+        if (startIndex != -1 && endIndex != -1) {
+            LocalTime currentTime = getNextDepartureTime(line, selectedTime);
 
-            for (int i = startIndex; i <= endIndex; i++) {
-                StationInfo station = stations.get(i);
+            if (startIndex <= endIndex) {
+                // Traverse from top to bottom
+                for (int i = startIndex; i <= endIndex; i++) {
+                    StationInfo station = stations.get(i);
+                    LocalTime travelTime = station.getTravelTime();
+                    LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
 
-                // Calculate the travel time from the previous station to the current station
-                LocalTime travelTime = station.getTravelTime();
+                    departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
 
-                // Calculate the departure time for the current station
-                LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
+                    currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
 
-                departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
+                }
+            } else {
+                // Traverse from bottom to top
+                for (int i = startIndex; i >= endIndex; i--) {
+                    StationInfo station = stations.get(i);
+                    LocalTime travelTime = station.getTravelTime();
+                    LocalTime nextDepartureTime = calculateDepartureTime(station, currentTime);
 
-                currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
+                    departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
 
+                    currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
+
+                }
             }
+
         } else {
             System.out.println("Invalid start or end index for stations.");
         }
@@ -111,9 +139,14 @@ public class StationManager {
     }
 
 
-
+    /**
+     * Calculates the next departure time based on the travel time of the current station.
+     *
+     * @param station              The current station.
+     * @param previousDepartureTime The time of the previous departure.
+     * @return The calculated next departure time.
+     */
     private LocalTime calculateDepartureTime(StationInfo station, LocalTime previousDepartureTime) {
-        // Calculate departure time based on the previous departure time and travel time
         return previousDepartureTime.plusHours(station.getTravelTime().getHour())
                 .plusMinutes(station.getTravelTime().getMinute());
     }
@@ -126,6 +159,9 @@ public class StationManager {
         busStations.addAll(getStationsForLine("Bus Line 2"));
     }
 
+    /**
+     * Initializes bus stations based on the available bus lines
+     */
     private void initializeTrainStations() {
         trainStations = getStationsForLine("Intercity Line 1");
         trainStations.addAll(getStationsForLine("Intercity Line 2"));
@@ -138,28 +174,36 @@ public class StationManager {
                 .collect(Collectors.toList());
     }
 
-    private void initializeLineDepartureTimes() {
-        lineDepartureTimes.put("Intercity Line 1", Arrays.asList(LocalTime.of(11, 0), LocalTime.of(14, 0), LocalTime.of(20, 0)));
-        lineDepartureTimes.put("Intercity Line 2", Arrays.asList(LocalTime.of(10, 30), LocalTime.of(15, 30), LocalTime.of(21, 30)));
-        lineDepartureTimes.put("Bus Line 1", Arrays.asList(LocalTime.of(8, 0), LocalTime.of(12, 0), LocalTime.of(16, 0)));
-        lineDepartureTimes.put("Bus Line 2", Arrays.asList(LocalTime.of(9, 30), LocalTime.of(13, 30), LocalTime.of(17, 30)));
-    }
-
-
-    private LocalTime getNextDepartureTime(String line, LocalTime SelectTime) {
+    /**
+     * Retrieves the next departure time after the selected time for a specific line.
+     *
+     * @param line       The line for which departure times are considered.
+     * @param selectedTime The selected time for finding the next departure time.
+     * @return The next departure time after the selected time, or the first departure time of the next day if none is found.
+     */
+    private LocalTime getNextDepartureTime(String line, LocalTime selectedTime) {
         List<LocalTime> departureTimes = lineDepartureTimes.getOrDefault(line, Collections.emptyList());
 
         // Zoek de eerstvolgende vertrektijd na het huidige tijdstip
         for (LocalTime departureTime : departureTimes) {
-            if (SelectTime.isBefore(departureTime)) {
+            if (selectedTime.isBefore(departureTime)) {
                 return departureTime;
             }
         }
 
         // Als er geen vertrektijd na het huidige tijdstip is, neem dan de eerste vertrektijd van morgen
-        return departureTimes.isEmpty() ? null : departureTimes.get(0);
+        if (departureTimes.isEmpty()) {
+            return null;
+        }
+        return departureTimes.get(0);
     }
 
+    /**
+     * Retrieves the line associated with a given departure station.
+     *
+     * @param departureStation The name of the departure station.
+     * @return The line associated with the departure station, or "No Line found" if not found.
+     */
     String getLineForStation(String departureStation) {
         for (Map.Entry<String, List<StationInfo>> entry : stationRoutes.entrySet()) {
             List<String> stationNames = entry.getValue().stream()

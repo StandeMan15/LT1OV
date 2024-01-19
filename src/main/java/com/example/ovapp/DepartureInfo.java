@@ -18,4 +18,5 @@ public class DepartureInfo {
     public LocalTime getDepartureTime() {
         return departureTime;
     }
+
 }

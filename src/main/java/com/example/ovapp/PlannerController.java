@@ -3,7 +3,6 @@ package com.example.ovapp;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
@@ -17,8 +16,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
-
 
 /**
  * Controller class for the OV Planner application.
@@ -47,6 +44,8 @@ public class PlannerController {
     @FXML
     private Label routeOutText;
     @FXML
+    private Label routeOutText1;
+    @FXML
     private Label departLabel;
     @FXML
     private Label arrivalLabel;
@@ -62,11 +61,12 @@ public class PlannerController {
     private Spinner<Integer> hourSpinner;
     @FXML
     private Spinner<Integer> minuteSpinner;
-    @FXML
-    private Label routeOutText1;
 
     /**
      * Searches for a route based on user inputs and displays the result.
+     * The method retrieves departure, arrival, vehicle, date, and time inputs from the user interface
+     * and uses the StationManager to obtain departure information and calculate the route details.
+     * The result is then formatted and displayed in two separate text fields.
      */
     @FXML
     protected void SearchRoute() {
@@ -78,24 +78,24 @@ public class PlannerController {
         Integer minuteTime = minuteSpinner.getValue();
 
         LocalTime selectedTime = LocalTime.of(hourTime, minuteTime);
-        LocalTime DepartureTime= null;
+        LocalTime departureTime= null;
 
         String selectedLine = stationManager.getLineForStation(Departure);
 
-
         List<DepartureInfo> departureInfos = stationManager.getDepartureTimesForStation(Departure, selectedLine, selectedTime, Arrival);
-
-        System.out.println("========================================");
-        for (DepartureInfo departureInfo : departureInfos) {
-            System.out.println("Station: " + departureInfo.getStation());
-            System.out.println("Vertrektijd: " + departureInfo.getDepartureTime());
-        }
 
         for (DepartureInfo departureInfo : departureInfos) {
             if (departureInfo.getStation().equals(Departure)) {
-                DepartureTime = departureInfo.getDepartureTime();
+                    departureTime = departureInfo.getDepartureTime();
                 break;
             }
+        }
+
+        if (departureTime == null) {
+            routeOutText.setText(String.format(translator.translate("no_route_found_message"),
+                    Vehicle, Departure, Arrival));
+            routeOutText1.setText("");
+            return; // Exit the method as there is no route
         }
 
         calculateRouteInfo(Departure, Arrival);
@@ -107,7 +107,7 @@ public class PlannerController {
 
             routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
-                    DepartureTime,
+                    departureTime,
                     travelTime, travelDistance));
         } catch (NullPointerException e) {
             routeOutText.setText(translator.translate("empty_field"));
@@ -115,36 +115,21 @@ public class PlannerController {
             System.out.println(e.getMessage());
         }
         try {
-            List<StationInfo> stations = stationRoutes.get("Intercity Line 1");
-            List<String> stops = getStopsAlongRoute(Departure, Arrival, stations);
-            routeOutText1.setText("Stops along the route:\n" + String.join("\n", stops));
+            List<String> stops = new ArrayList<>();
+
+            for (DepartureInfo departureInfo : departureInfos) {
+                if (!departureInfo.getStation().equals(Departure)) {
+                    stops.add(" " + departureInfo.getDepartureTime() + " " + departureInfo.getStation());
+                }
+            }
+
+            routeOutText1.setText(translator.translate("route_message_stops") + "\n" + String.join("\n", stops));
         } catch (NullPointerException e) {
-            routeOutText.setText(translator.translate("empty_field"));
+            routeOutText1.setText(translator.translate("empty_field"));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-
-    private List<String> getStopsAlongRoute(String departure, String arrival, List<StationInfo> stations) {
-        List<String> stops = new ArrayList<>();
-
-        boolean foundDeparture = false;
-
-        for (StationInfo station : stations) {
-            if (foundDeparture) {
-                stops.add(station.getName());
-                if (station.getName().equals(arrival)) {
-                    break;
-                }
-            } else if (station.getName().equals(departure)) {
-                foundDeparture = true;
-                stops.add(station.getName());
-            }
-        }
-
-        return stops;
-    }
-
 
     /**
      * Initializes the controller when the FXML file is loaded.
@@ -194,7 +179,9 @@ public class PlannerController {
             vehicleSelectionComboBox.getSelectionModel().select(selectedVehicleIndex);
         }
 
-        if (!routeOutText.getText().isEmpty()) SearchRoute();
+        if (!routeOutText.getText().isEmpty()) {
+            SearchRoute();
+        }
 
         datePicker.setConverter(createDateConverter());
         datePicker.setValue(datePicker.getValue());
@@ -254,7 +241,6 @@ public class PlannerController {
             }
         }
     }
-
 
     /**
      * Initializes language change buttons.
@@ -329,17 +315,6 @@ public class PlannerController {
         }
         return translatedList;
     }
-
-//    private void updateArrivalOptions() {
-//        String selectedOption = departureComboBox.getValue();
-//
-//        FilteredList<String> filteredArrivalOptions = new FilteredList<>(FXCollections.observableArrayList(trainStations));
-//
-//        filteredArrivalOptions.setPredicate(option -> !option.equals(selectedOption));
-//        arrivalComboBox.setItems(filteredArrivalOptions);
-//
-//        arrivalComboBox.setValue(filteredArrivalOptions.isEmpty() ? null : filteredArrivalOptions.get(0));
-//    }
 
     private void initializeTimePicker() {
         LocalTime currentTime = LocalTime.now();

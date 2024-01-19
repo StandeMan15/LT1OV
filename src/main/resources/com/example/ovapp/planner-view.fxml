@@ -10,7 +10,7 @@
     <opaqueInsets>
         <Insets />
     </opaqueInsets>
-    <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="71.0" layoutY="329.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
+    <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="60.0" layoutY="340.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: rgba(225,225,225,0.5); -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#1e1f22" wrapText="true">
         <opaqueInsets>
             <Insets />
         </opaqueInsets>
@@ -18,6 +18,20 @@
             <Font size="30.0" />
         </font>
     </Label>
+
+    <ScrollPane layoutX="515.0" layoutY="340.0" minWidth="408.0" prefHeight="344.0"
+                style="-fx-background-color: #FBCE1E80; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-border-radius: 10; -fx-background-radius: 10;">
+        <Label fx:id="routeOutText1" alignment="TOP_LEFT" minHeight="339.0" prefWidth="408.0"
+               style="-fx-background-color: #FBCE1E80; -fx-background-radius: 10;" textFill="#1e1f22" wrapText="true">
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+            <font>
+                <Font size="30.0"/>
+            </font>
+        </Label>
+    </ScrollPane>
+
     <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="1000.0" spacing="10.0" style="-fx-background-color: #FFAE00;">
         <ImageView fitHeight="148.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
             <HBox.margin>
@@ -58,10 +72,9 @@
             <Insets right="10.0" />
          </HBox.margin>
          <graphic>
-            <ImageView fitHeight="46.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/Keyboard.png" />
-               </image></ImageView>
+             <ImageView fitHeight="46.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                 <Image url="@images/Keyboard.png"/>
+             </ImageView>
          </graphic>
         </Button>
     </HBox>
@@ -114,7 +127,7 @@
             <DatePicker fx:id="datePicker" prefHeight="44.0" prefWidth="238.0" style="-fx-font-size: 20;" />
         </VBox>
     </HBox>
-    <Button fx:id="searchButton" layoutX="74.0" layoutY="282.0" onAction="#SearchRoute" prefHeight="44.0" prefWidth="867.0" style="-fx-background-color: red;">
+    <Button fx:id="searchButton" layoutX="244.0" layoutY="287.0" onAction="#SearchRoute" prefHeight="48.0" prefWidth="484.0" style="-fx-background-color: rgba(255,165,0,0.67); -fx-background-radius: 5px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 5px;" textFill="#333333">
         <font>
             <Font name="System Bold" size="20.0" />
         </font>
@@ -122,12 +135,4 @@
          <Insets />
       </opaqueInsets>
     </Button>
-   <Label fx:id="routeOutText1" alignment="TOP_LEFT" layoutX="515.0" layoutY="329.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: white; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#fc0000" wrapText="true">
-      <opaqueInsets>
-         <Insets />
-      </opaqueInsets>
-      <font>
-         <Font size="30.0" />
-      </font>
-   </Label>
 </Pane>

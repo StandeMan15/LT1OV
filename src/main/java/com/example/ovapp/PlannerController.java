@@ -79,7 +79,7 @@ public class PlannerController {
         Integer minuteTime = minuteSpinner.getValue();
 
         LocalTime selectedTime = LocalTime.of(hourTime, minuteTime);
-        LocalTime DepartureTime= null;
+        LocalTime departureTime= null;
 
         String selectedLine = stationManager.getLineForStation(Departure);
 
@@ -87,12 +87,12 @@ public class PlannerController {
 
         for (DepartureInfo departureInfo : departureInfos) {
             if (departureInfo.getStation().equals(Departure)) {
-                DepartureTime = departureInfo.getDepartureTime();
+                    departureTime = departureInfo.getDepartureTime();
                 break;
             }
         }
 
-        if (DepartureTime == null) {
+        if (departureTime == null) {
             routeOutText.setText(String.format(translator.translate("no_route_found_message"),
                     Vehicle, Departure, Arrival));
             routeOutText1.setText("");
@@ -103,13 +103,12 @@ public class PlannerController {
         LocalTime travelTime = routeInfo.getTotalTravelTime();
         Integer travelDistance = routeInfo.getTotalDistance();
 
-
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(translator.translate("date_format"));
 
             routeOutText.setText(String.format(translator.translate("route_message"),
                     Vehicle, Departure, Arrival, selectedDate.format(dateFormatter),
-                    DepartureTime,
+                    departureTime,
                     travelTime, travelDistance));
         } catch (NullPointerException e) {
             routeOutText.setText(translator.translate("empty_field"));

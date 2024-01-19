@@ -115,6 +115,7 @@ public class StationManager {
                     departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
 
                     currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
+
                 }
             } else {
                 // Traverse from bottom to top
@@ -126,8 +127,10 @@ public class StationManager {
                     departureInfos.add(new DepartureInfo(station.getName(), nextDepartureTime));
 
                     currentTime = currentTime.plusHours(travelTime.getHour()).plusMinutes(travelTime.getMinute());
+
                 }
             }
+
         } else {
             System.out.println("Invalid start or end index for stations.");
         }

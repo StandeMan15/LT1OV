@@ -19,17 +19,17 @@
         </font>
     </Label>
 
-    <ScrollPane layoutX="515.0" layoutY="340.0" minWidth="408.0" prefHeight="344.0" style="-fx-background-color: #FBCE1E80; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-border-radius: 10; -fx-background-radius: 10;">
-        <content>
-            <Label fx:id="routeOutText1" alignment="TOP_LEFT" minHeight="339.0" prefWidth="408.0" style="-fx-background-color: #FBCE1E80; -fx-background-radius: 10;" textFill="#1e1f22" wrapText="true">
-                <opaqueInsets>
-                    <Insets />
-                </opaqueInsets>
-                <font>
-                    <Font size="30.0" />
-                </font>
-            </Label>
-        </content>
+    <ScrollPane layoutX="515.0" layoutY="340.0" minWidth="408.0" prefHeight="344.0"
+                style="-fx-background-color: #FBCE1E80; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-border-radius: 10; -fx-background-radius: 10;">
+        <Label fx:id="routeOutText1" alignment="TOP_LEFT" minHeight="339.0" prefWidth="408.0"
+               style="-fx-background-color: #FBCE1E80; -fx-background-radius: 10;" textFill="#1e1f22" wrapText="true">
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+            <font>
+                <Font size="30.0"/>
+            </font>
+        </Label>
     </ScrollPane>
 
     <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="1000.0" spacing="10.0" style="-fx-background-color: #FFAE00;">
@@ -72,10 +72,9 @@
             <Insets right="10.0" />
          </HBox.margin>
          <graphic>
-            <ImageView fitHeight="46.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/Keyboard.png" />
-               </image></ImageView>
+             <ImageView fitHeight="46.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                 <Image url="@images/Keyboard.png"/>
+             </ImageView>
          </graphic>
         </Button>
     </HBox>

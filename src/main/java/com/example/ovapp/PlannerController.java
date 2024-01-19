@@ -17,7 +17,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-
 /**
  * Controller class for the OV Planner application.
  * Handles user interactions and updates the UI.

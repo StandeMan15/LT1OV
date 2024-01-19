@@ -50,7 +50,7 @@ public class StationManager {
                 new StationInfo("Amsterdam Centraal", 6, LocalTime.of(0, 8), "")
         );
         List<StationInfo> busLine1 = Arrays.asList(
-                new StationInfo("Eemsplein", 1, LocalTime.of(0, 5), ""),
+                new StationInfo("Eemplein", 1, LocalTime.of(0, 5), ""),
                 new StationInfo("Stadhuis", 1, LocalTime.of(0, 5), ""),
                 new StationInfo("Centrum", 1, LocalTime.of(0, 3), ""),
                 new StationInfo("t'Kip", 4, LocalTime.of(0, 10), "")

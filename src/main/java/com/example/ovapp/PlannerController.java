@@ -123,7 +123,8 @@ public class PlannerController {
                 }
             }
 
-            routeOutText1.setText(translator.translate("route_message_stops") + "\n" + String.join("\n", stops));
+            routeOutText1.setText(
+                    translator.translate("route_message_stops") + "\n" + String.join("\n", stops) + translator.translate("last_stop"));
         } catch (NullPointerException e) {
             routeOutText1.setText(translator.translate("empty_field"));
         } catch (Exception e) {
@@ -170,10 +171,20 @@ public class PlannerController {
         timeDateLabel.setText(translator.translate("time_date_label"));
         transportLabel.setText(translator.translate("transport_label"));
 
+        int selectedDepartureIndex = departureComboBox.getSelectionModel().getSelectedIndex();
+        int selectedArrivalIndex = arrivalComboBox.getSelectionModel().getSelectedIndex();
         int selectedVehicleIndex = vehicleSelectionComboBox.getSelectionModel().getSelectedIndex();
 
         ObservableList<String> translatedVehicles = translateList(vehicles);
         vehicleSelectionComboBox.setItems(translatedVehicles);
+
+        if (selectedDepartureIndex != -1) {
+            departureComboBox.getSelectionModel().select(selectedDepartureIndex);
+        }
+
+        if (selectedArrivalIndex != -1) {
+            arrivalComboBox.getSelectionModel().select(selectedArrivalIndex);
+        }
 
         if (selectedVehicleIndex != -1) {
             vehicleSelectionComboBox.getSelectionModel().select(selectedVehicleIndex);

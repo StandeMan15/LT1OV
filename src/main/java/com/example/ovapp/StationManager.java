@@ -175,21 +175,24 @@ public class StationManager {
      * Retrieves the next departure time after the selected time for a specific line.
      *
      * @param line       The line for which departure times are considered.
-     * @param SelectTime The selected time for finding the next departure time.
+     * @param selectedTime The selected time for finding the next departure time.
      * @return The next departure time after the selected time, or the first departure time of the next day if none is found.
      */
-    private LocalTime getNextDepartureTime(String line, LocalTime SelectTime) {
+    private LocalTime getNextDepartureTime(String line, LocalTime selectedTime) {
         List<LocalTime> departureTimes = lineDepartureTimes.getOrDefault(line, Collections.emptyList());
 
         // Zoek de eerstvolgende vertrektijd na het huidige tijdstip
         for (LocalTime departureTime : departureTimes) {
-            if (SelectTime.isBefore(departureTime)) {
+            if (selectedTime.isBefore(departureTime)) {
                 return departureTime;
             }
         }
 
         // Als er geen vertrektijd na het huidige tijdstip is, neem dan de eerste vertrektijd van morgen
-        return departureTimes.isEmpty() ? null : departureTimes.get(0);
+        if (departureTimes.isEmpty()) {
+            return null;
+        }
+        return departureTimes.get(0);
     }
 
     /**

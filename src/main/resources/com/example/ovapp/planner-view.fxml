@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import java.net.URL?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-image: url('file:src/main/resources/com/example/ovapp/images/OVApp_Achtergrond.png'); -fx-background-size: cover; -fx-background-position: center center;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.PlannerController">
     <opaqueInsets>
         <Insets />
@@ -20,9 +21,10 @@
     </Label>
 
     <ScrollPane layoutX="515.0" layoutY="340.0" minWidth="408.0" prefHeight="344.0"
-                style="-fx-background-color: #FBCE1E80; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-border-radius: 10; -fx-background-radius: 10;">
-        <Label fx:id="routeOutText1" alignment="TOP_LEFT" minHeight="339.0" prefWidth="408.0"
-               style="-fx-background-color: #FBCE1E80; -fx-background-radius: 10;" textFill="#1e1f22" wrapText="true">
+                style="-fx-background-color: transparent; -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-border-radius: 10; -fx-background-radius: 10;"
+                hbarPolicy="NEVER">
+        <Label fx:id="routeOutText1" alignment="TOP_LEFT" minHeight="339.0" prefWidth="420.0"
+               style="-fx-background-color: rgba(225,225,225,0.5); -fx-background-radius: 10;" textFill="#1e1f22" wrapText="true">
             <opaqueInsets>
                 <Insets/>
             </opaqueInsets>
@@ -30,6 +32,9 @@
                 <Font size="30.0"/>
             </font>
         </Label>
+        <stylesheets>
+            <URL value="@stylesheet.css" />
+        </stylesheets>
     </ScrollPane>
 
     <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="1000.0" spacing="10.0" style="-fx-background-color: #FFAE00;">

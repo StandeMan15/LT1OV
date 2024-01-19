@@ -1,0 +1,15 @@
+.scroll-pane > .viewport  {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-arrow,
+.scroll-pane .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 5;
+    pointer-events: none; /* Maak het element niet bruikbaar voor pointer events */
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-padding: 0;
+    -fx-pref-width: 22.0; /* Stel de breedte in naar wens */
+    -fx-background-radius: 8.0; /* Afgeronde hoek (helft van de breedte) */
+}

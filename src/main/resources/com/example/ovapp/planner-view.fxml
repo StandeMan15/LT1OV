@@ -6,12 +6,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style=" -fx-background-size: cover; -fx-background-position: center center;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.PlannerController">
-    <ImageView>
-        <image>
-            <Image url="@images/OVapp_Achtergrond.png" />
-        </image>
-    </ImageView>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-image: url('file:src/main/resources/com/example/ovapp/images/OVApp_Achtergrond.png'); -fx-background-size: cover; -fx-background-position: center center;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ovapp.PlannerController">
+    <opaqueInsets>
+        <Insets />
+    </opaqueInsets>
     <Label fx:id="routeOutText" alignment="TOP_LEFT" layoutX="60.0" layoutY="340.0" prefHeight="344.0" prefWidth="426.0" style="-fx-border-radius: 10; -fx-background-color: rgba(225,225,225,0.5); -fx-background-size: cover; -fx-background-position: center center; -fx-border-color: black; -fx-border-width: 1.5; -fx-border-style: solid; -fx-background-radius: 10;" textFill="#1e1f22" wrapText="true">
         <opaqueInsets>
             <Insets />
